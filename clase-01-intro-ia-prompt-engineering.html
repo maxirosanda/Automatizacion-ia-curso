@@ -278,13 +278,62 @@ html,body{transition:background .3s,color .3s}
   .qa .a{display:none;padding:0 1.4vw 1.8vh calc(1.4vw + 2.95em);font-size:clamp(.92rem,1.55vw,1.2rem);line-height:1.5;color:var(--body)}
   .qa.open .a{display:block}
   @media print{.qa .a{display:block}.qa .ver{display:none}}
+
+  /* ===== Animaciones v2: revelado en secuencia (16 s), resaltado por turno y armado del prompt (20 s) ===== */
+  .anim .q1,.anim .q2,.anim .q3,.anim .q4,.anim .q5,.anim .q6,.anim .q7,.anim .q8,.anim .x1,.anim .x2,.anim .x3,.anim .x4,.anim .x5,.anim .knob{animation-duration:16s;animation-iteration-count:infinite;animation-timing-function:ease-in-out}
+  .anim .b1,.anim .b2,.anim .b3,.anim .b4,.anim .b5,.anim .b6{animation-duration:20s;animation-iteration-count:infinite;animation-timing-function:ease-in-out}
+  .anim .q1{animation-name:kq1}  .anim .q2{animation-name:kq2}  .anim .q3{animation-name:kq3}  .anim .q4{animation-name:kq4}  .anim .q5{animation-name:kq5}  .anim .q6{animation-name:kq6}  .anim .q7{animation-name:kq7}  .anim .q8{animation-name:kq8}
+  .anim .x1{animation-name:kx1}  .anim .x2{animation-name:kx2}  .anim .x3{animation-name:kx3}  .anim .x4{animation-name:kx4}  .anim .x5{animation-name:kx5}
+  .anim .b1{animation-name:kb1}  .anim .b2{animation-name:kb2}  .anim .b3{animation-name:kb3}  .anim .b4{animation-name:kb4}  .anim .b5{animation-name:kb5}  .anim .b6{animation-name:kb6}
+  @keyframes kq1{0%,4%{opacity:0}7%,95%{opacity:1}100%{opacity:0}}
+  @keyframes kq2{0%,14%{opacity:0}17%,95%{opacity:1}100%{opacity:0}}
+  @keyframes kq3{0%,24%{opacity:0}27%,95%{opacity:1}100%{opacity:0}}
+  @keyframes kq4{0%,34%{opacity:0}37%,95%{opacity:1}100%{opacity:0}}
+  @keyframes kq5{0%,44%{opacity:0}47%,95%{opacity:1}100%{opacity:0}}
+  @keyframes kq6{0%,54%{opacity:0}57%,95%{opacity:1}100%{opacity:0}}
+  @keyframes kq7{0%,64%{opacity:0}67%,95%{opacity:1}100%{opacity:0}}
+  @keyframes kq8{0%,74%{opacity:0}77%,95%{opacity:1}100%{opacity:0}}
+  @keyframes kx1{0%,4%{opacity:0}6%,13%{opacity:1}15%,100%{opacity:0}}
+  @keyframes kx2{0%,14%{opacity:0}16%,23%{opacity:1}25%,100%{opacity:0}}
+  @keyframes kx3{0%,24%{opacity:0}26%,33%{opacity:1}35%,100%{opacity:0}}
+  @keyframes kx4{0%,34%{opacity:0}36%,43%{opacity:1}45%,100%{opacity:0}}
+  @keyframes kx5{0%,44%{opacity:0}46%,53%{opacity:1}55%,100%{opacity:0}}
+  @keyframes kb1{0%,3%{opacity:0}6%,96%{opacity:1}100%{opacity:0}}
+  @keyframes kb2{0%,10%{opacity:0}13%,96%{opacity:1}100%{opacity:0}}
+  @keyframes kb3{0%,17%{opacity:0}20%,96%{opacity:1}100%{opacity:0}}
+  @keyframes kb4{0%,24%{opacity:0}27%,96%{opacity:1}100%{opacity:0}}
+  @keyframes kb5{0%,31%{opacity:0}34%,96%{opacity:1}100%{opacity:0}}
+  @keyframes kb6{0%,40%{opacity:0}43%,96%{opacity:1}100%{opacity:0}}
+  .anim .in{fill:var(--okbg);stroke:var(--ok);stroke-width:2}
+  .anim .knobc{fill:var(--card);stroke:var(--node-line);stroke-width:2}
+  .anim .knob{transform-box:fill-box;transform-origin:center;animation-name:kknob}
+  @keyframes kknob{0%,5%{transform:rotate(var(--a0))}9%,15%{transform:rotate(var(--a1))}19%,25%{transform:rotate(var(--a2))}29%,95%{transform:rotate(0deg)}100%{transform:rotate(var(--a0))}}
+  /* Texto que se escribe de a un pedacito */
+  .typing{font-family:"JetBrains Mono","Cascadia Code",Consolas,monospace;font-size:clamp(1.25rem,2.7vw,2.1rem);text-align:center;
+    white-space:pre-wrap;line-height:1.3;color:var(--muted)}
+  .typing span:not(.base){color:var(--orange-d);font-weight:500}
+  .loop .node{animation:kpulse 1.6s linear infinite}
+  .loop .n2{animation-delay:-1.07s} .loop .n3{animation-delay:-.53s}
+  @keyframes kpulse{0%,30%{background:var(--orange);border-color:var(--orange);color:#fff}36%,100%{background:var(--card);border-color:var(--node-line);color:var(--ink)}}
+  /* Frase que se corta en tokens y después muestra sus números */
+  .chips.cut{margin-bottom:1.5em}
+  .chips.cut span{--bg:var(--card);--bd:var(--node-line);--fg:var(--ink);position:relative;background:var(--bg);border-color:var(--bd);color:var(--fg);
+    animation:kcut 16s ease-in-out infinite}
+  .chips.cut span:nth-child(3n+1){--bg:var(--peach);--bd:var(--orange)}
+  .chips.cut span:nth-child(3n){--bg:var(--orange);--bd:var(--orange);--fg:#fff}
+  .chips.cut i{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:.45em;font-style:normal;font-size:.58em;
+    color:var(--muted);font-weight:500;animation:knum 16s ease-in-out infinite}
+  @keyframes kcut{0%,12%{margin:0 calc(-.7em - 2px);background:transparent;border-color:transparent;color:var(--ink)}
+    24%,95%{margin:0;background:var(--bg);border-color:var(--bd);color:var(--fg)}
+    100%{margin:0 calc(-.7em - 2px);background:transparent;border-color:transparent;color:var(--ink)}}
+  @keyframes knum{0%,40%{opacity:0}48%,93%{opacity:1}97%,100%{opacity:0}}
 </style>
 <script>try{var q=new URLSearchParams(location.search).get('tema');var t=(q==='dark'||q==='light')?q:localStorage.getItem('curso-theme');if(q==='dark'||q==='light')localStorage.setItem('curso-theme',q);if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 </head>
 <body>
 <div class="announce">
   <span class="pill-dark">CLASE 1 🤖</span>
-  <span>Entendé cómo <b style="color:#fff">piensa una IA</b> y aprendé a darle instrucciones</span>
+  <span>Mirá <b style="color:#fff">qué pasa adentro de una IA</b> y aprendé a pedirle las cosas</span>
   <span class="sep"></span>
   <span>Módulo 1 de 9</span>
 </div>
@@ -316,71 +365,60 @@ html,body{transition:background .3s,color .3s}
 <section class="slide center">
   <span class="tag">Clase 1 · AI Automation</span>
   <h1>Introducción a la IA<br><span class="hl">y al Prompt Engineering</span></h1>
-  <p class="sub">Qué es un LLM, cómo procesa el texto y cómo escribir prompts que sirvan para automatizar</p>
+  <p class="sub">Qué pasa adentro de una IA cuando le escribís, y cómo pedirle las cosas para que te sirvan</p>
   <p class="sub" style="font-size:1rem">Flechas ← → para navegar · F para pantalla completa · T para cambiar tema</p>
 </section>
 
 <!-- 2 · Agenda -->
 <section class="slide">
   <h2>Qué vamos a ver hoy</h2>
-  <ul>
-    <li>Qué es (y qué no es) la <b>Inteligencia Artificial</b>, y cuáles son sus subcampos</li>
-    <li>Qué es un <b>LLM</b> y por qué decimos que "predice la palabra que sigue"</li>
-    <li>La diferencia entre <b>IA</b> e <b>IA generativa</b></li>
-    <li>Cómo procesa el texto: <b>tokens</b>, tokenizador y <b>ventana de contexto</b></li>
-    <li>Por qué una IA <b>alucina</b></li>
-    <li><b>Prompt Engineering</b>: rol, tarea, contexto y formato de salida</li>
-    <li><b>Delimitadores</b>, zero-shot y few-shot</li>
-    <li>Automatización <b>tradicional</b> vs. automatización <b>con IA</b></li>
-    <li>Una práctica para hacer en clase y el <b>repaso</b> con tarjetas</li>
-  </ul>
+  <div class="grid">
+    <div class="card"><h3>🧭 Qué es la IA (y qué no)</h3><p class="small">De dónde salen ChatGPT y Claude, y qué quiere decir esa sigla que vas a escuchar todo el curso: <b>LLM</b>.</p></div>
+    <div class="card"><h3>⚙️ Qué pasa adentro</h3><p class="small">El recorrido de tu mensaje, <b>paso a paso</b>, desde que apretás Enter hasta que aparece la respuesta.</p></div>
+    <div class="card"><h3>⚠️ Sus límites</h3><p class="small">Por qué a veces "se olvida" de lo que le dijiste y por qué a veces <b>inventa</b> con total seguridad.</p></div>
+    <div class="card"><h3>✍️ Cómo pedirle las cosas</h3><p class="small">El <b>prompt</b>: la diferencia entre una respuesta cualquiera y una que sirve para automatizar.</p></div>
+  </div>
+  <p class="note"><b>No hace falta saber programar ni matemática.</b> Vamos a usar ejemplos de todos los días, y al final hay una práctica y un repaso con tarjetas.</p>
 </section>
 
-<!-- 3 · ChatGPT no es "la IA" -->
+<!-- 3 · Ya usás IA -->
 <section class="slide">
   <span class="tag" style="align-self:flex-start">Para ubicarnos</span>
-  <h2>ChatGPT no es "la IA"</h2>
-  <p class="big">La <b>Inteligencia Artificial</b> no es un producto: es una <b>rama de la informática</b>.</p>
-  <div class="flow">
-    <div class="node">Ciberseguridad</div>
-    <div class="node">Ciencia de datos</div>
-    <div class="node">Ingeniería de software</div>
-    <div class="node o">Inteligencia Artificial</div>
+  <h2>Ya usás IA todos los días</h2>
+  <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card"><h3>📱 El teclado del celular</h3><p class="small">Te sugiere la palabra que sigue mientras escribís.</p></div>
+    <div class="card"><h3>📧 El filtro de spam</h3><p class="small">Decide solo si un mail es spam o no.</p></div>
+    <div class="card"><h3>🗺️ La app de mapas</h3><p class="small">Estima cuánto vas a tardar en llegar.</p></div>
   </div>
-  <div class="grid">
-    <div class="card"><h3>🎯 Su objetivo</h3><p class="small">Desarrollar sistemas capaces de realizar tareas que <b>necesitan inteligencia humana</b>.</p></div>
-    <div class="card"><h3>💬 ¿Y ChatGPT o Claude?</h3><p class="small">Son productos construidos <b>con</b> IA. Decirles "la IA" es aceptable en el día a día, pero en términos académicos no es correcto.</p></div>
-  </div>
-  <p class="note">Como toda rama, la IA tiene <b>subcampos</b>. Cuatro de ellos explican de dónde salen ChatGPT y Claude.</p>
+  <p class="big">La <b>Inteligencia Artificial</b> no es un robot ni un producto: es una <b>rama de la informática</b>.</p>
+  <p>Igual que la ciberseguridad o la ciencia de datos. Su objetivo: lograr que una computadora haga tareas que normalmente <b>necesitan inteligencia humana</b>.</p>
+  <p class="note"><b>¿Y ChatGPT o Claude?</b> Son productos hechos <b>con</b> IA. Decirles "la IA" está bien en el día a día, aunque técnicamente no sea lo correcto.</p>
 </section>
 
 <!-- 4 · Subcampos -->
 <section class="slide">
-  <h2>Los subcampos de la IA</h2>
+  <h2>Las ramas de la IA</h2>
   <div class="grid" style="grid-template-columns:1fr 1.1fr;align-items:center">
     <div class="card" style="padding:1vh 1vw">
-      <svg class="viz" viewBox="0 0 560 320" style="max-height:46vh" role="img" aria-label="Diagrama: dentro de la Inteligencia Artificial está el Machine Learning y, dentro de él, el Deep Learning. El NLP y la Visión Artificial se cruzan con el Deep Learning. En el cruce entre Deep Learning y NLP aparece el LLM">
+      <svg class="viz anim" viewBox="0 0 560 320" style="max-height:46vh" role="img" aria-label="Animación: dentro de la Inteligencia Artificial aparece el Machine Learning; dentro de él, el Deep Learning; después se suman el NLP y la Visión Artificial; y en el cruce entre Deep Learning y NLP aparece el LLM">
         <rect class="set" x="8" y="8" width="544" height="304" rx="24"/>
         <text class="grp" x="28" y="36">INTELIGENCIA ARTIFICIAL</text>
-        <rect class="set" x="28" y="50" width="330" height="246" rx="20"/>
-        <text class="b" x="46" y="78">Machine Learning</text>
-        <rect class="set m" x="48" y="94" width="290" height="186" rx="16"/>
-        <text class="b" x="66" y="122">Deep Learning</text>
-        <rect class="set" x="238" y="138" width="296" height="58" rx="14"/>
-        <text class="b" x="436" y="173" text-anchor="middle">NLP · lenguaje</text>
-        <rect class="set o" x="244" y="144" width="88" height="46" rx="10"/>
-        <text class="wt" x="288" y="173" text-anchor="middle">LLM</text>
-        <rect class="set" x="238" y="212" width="296" height="54" rx="14"/>
-        <text class="b" x="436" y="245" text-anchor="middle">Visión Artificial</text>
+        <g class="q1"><rect class="set" x="28" y="50" width="330" height="246" rx="20"/><text class="b" x="46" y="78">Machine Learning</text></g>
+        <g class="q2"><rect class="set m" x="48" y="94" width="290" height="186" rx="16"/><text class="b" x="66" y="122">Deep Learning</text></g>
+        <g class="q3">
+          <rect class="set" x="238" y="138" width="296" height="58" rx="14"/><text class="b" x="436" y="173" text-anchor="middle">NLP · lenguaje</text>
+          <rect class="set" x="238" y="212" width="296" height="54" rx="14"/><text class="b" x="436" y="245" text-anchor="middle">Visión Artificial</text>
+        </g>
+        <g class="q4"><rect class="set o" x="244" y="144" width="88" height="46" rx="10"/><text class="wt" x="288" y="173" text-anchor="middle">LLM</text></g>
       </svg>
-      <p class="cap">Esquema simplificado: los campos se superponen entre sí</p>
+      <p class="cap">La animación se repite sola · Esquema simplificado: las ramas se superponen</p>
     </div>
     <table class="plain">
-      <tr><th>Subcampo</th><th>Qué hace</th></tr>
-      <tr><td>Machine Learning</td><td>Las máquinas <b>aprenden con ejemplos</b>: identifican patrones sin que se les diga qué hacer. Cuantos más datos reciben, mejores resultados.</td></tr>
-      <tr><td>Deep Learning</td><td>Subcampo del Machine Learning. Usa <b>redes neuronales de muchas capas</b> para resolver problemas complejos.</td></tr>
-      <tr><td>NLP</td><td><i>Natural Language Processing.</i> Permite leer, interpretar y <b>generar lenguaje humano</b>, escrito o hablado.</td></tr>
-      <tr><td>Visión Artificial</td><td><i>Computer Vision.</i> Si el NLP se ocupa de hablar y escribir, esta rama se ocupa de <b>entender imágenes y videos</b>.</td></tr>
+      <tr><th>Rama</th><th>En criollo</th></tr>
+      <tr><td>Machine Learning</td><td><b>Aprender con ejemplos</b>, sin que nadie le dicte las reglas. Como un chico que aprende qué es un perro después de ver muchos perros.</td></tr>
+      <tr><td>Deep Learning</td><td>Una forma más potente de lo anterior. Usa "redes neuronales" de <b>muchas capas</b> para resolver problemas complejos.</td></tr>
+      <tr><td>NLP</td><td>La rama del <b>lenguaje humano</b>: leerlo, interpretarlo y generarlo, escrito o hablado.</td></tr>
+      <tr><td>Visión Artificial</td><td>La rama de las <b>imágenes y los videos</b>. Por ejemplo, el celular que reconoce tu cara.</td></tr>
     </table>
   </div>
 </section>
@@ -390,28 +428,56 @@ html,body{transition:background .3s,color .3s}
   <span class="tag" style="align-self:flex-start">Concepto clave</span>
   <h2>¿De dónde sale un LLM?</h2>
   <div class="flow">
-    <div class="node">Deep Learning<small>redes de muchas capas</small></div>
+    <div class="node">Deep Learning<small>aprender con muchas capas</small></div>
     <span class="arrow">+</span>
-    <div class="node m">NLP<small>entender el lenguaje</small></div>
+    <div class="node m">NLP<small>trabajar con lenguaje</small></div>
     <span class="arrow">+</span>
     <div class="node">Muchísimo texto<small>libros, foros, artículos</small></div>
     <span class="arrow">→</span>
     <div class="node o">LLM<small>Large Language Model</small></div>
   </div>
-  <p class="big">Un <b>LLM</b> es un sistema diseñado para <b>comprender, procesar y generar lenguaje humano</b>, basado en una red neuronal entrenada con enormes cantidades de texto.</p>
+  <p class="big">Un <b>LLM</b> ("modelo de lenguaje grande") es un programa que aprendió a <b>leer y escribir como las personas</b> después de procesar una cantidad enorme de texto.</p>
   <div class="grid">
     <div class="card"><h3>🤖 Ejemplos</h3><p class="small">Los modelos que están detrás de <b>ChatGPT</b> y de <b>Claude</b> son LLM.</p></div>
-    <div class="card"><h3>🧩 Qué aprendió</h3><p class="small"><b>Patrones</b>: qué palabras suelen seguir a otras, cómo se estructura una frase, cómo se responde una pregunta.</p></div>
+    <div class="card"><h3>📚 "Grande" de verdad</h3><p class="small">Procesó más texto del que una persona podría leer en <b>miles de vidas</b>.</p></div>
   </div>
-  <p class="note">Estos son los modelos que van a <b>vivir dentro de nuestras automatizaciones</b>.</p>
+  <p class="note">Estos son los modelos que van a <b>vivir dentro de nuestras automatizaciones</b>. Veamos cómo funcionan.</p>
 </section>
 
-<!-- 6 · Predice la palabra que sigue -->
+<!-- 6 · Entrenamiento: la palabra tapada -->
 <section class="slide">
-  <h2>Un LLM predice la palabra que sigue</h2>
-  <p>Toda respuesta de un LLM sale de <b>probabilidades</b>: calcula qué palabra es la más adecuada para continuar el texto que recibió.</p>
+  <span class="tag" style="align-self:flex-start">Antes de que lo uses · el entrenamiento</span>
+  <h2>¿Cómo aprendió? El juego de la palabra tapada</h2>
+  <p>Nadie le cargó reglas de gramática. Aprendió jugando a un solo juego, <b>miles de millones de veces</b>: le tapan la palabra que sigue en un texto real y tiene que adivinarla.</p>
   <div class="card" style="padding:1vh 1vw">
-    <svg class="viz anim" viewBox="0 0 900 215" role="img" aria-label="Animación: con el contexto de que son las 21 horas, para completar la frase Hola, buenas, la palabra noches tiene una probabilidad mucho más alta que tardes, días o pizzas. El modelo elige noches">
+    <svg class="viz anim" viewBox="0 0 900 215" role="img" aria-label="Animación: al modelo le tapan la última palabra de la frase El gato duerme en el sillón. Al principio responde martes y se equivoca. Más adelante responde jardín y se acerca. Mucho después responde sillón y acierta. Con cada error, sus perillas internas se ajustan un poco">
+      <text class="mono" x="20" y="28" style="font-size:16px">Texto real:   "El gato duerme en el sillón"</text>
+      <text class="mono" x="20" y="52" style="font-size:16px">Lo que ve:    "El gato duerme en el ______"</text>
+      <g class="q1"><text class="grp" x="20" y="100">AL PRINCIPIO</text><rect class="out" x="200" y="78" width="140" height="34" rx="8"/><text class="mono" x="270" y="100" text-anchor="middle">martes</text><text class="t-bad" x="360" y="100">✕ nada que ver → se ajusta</text></g>
+      <g class="q2"><text class="grp" x="20" y="144">MÁS ADELANTE</text><rect class="ghost" x="200" y="122" width="140" height="34" rx="8"/><text class="mono" x="270" y="144" text-anchor="middle">jardín</text><text class="b" x="360" y="144">casi → se ajusta un poco más</text></g>
+      <g class="q3"><text class="grp" x="20" y="188">MUCHO DESPUÉS</text><rect class="in" x="200" y="166" width="140" height="34" rx="8"/><text class="mono" x="270" y="188" text-anchor="middle">sillón</text><text class="t-ok" x="360" y="188">✓ acertó</text></g>
+      <g class="knob" style="--a0:150deg;--a1:80deg;--a2:30deg"><circle class="knobc" cx="730" cy="98" r="17"/><line class="arr" x1="730" y1="98" x2="730" y2="84"/></g>
+      <g class="knob" style="--a0:-120deg;--a1:-60deg;--a2:-20deg"><circle class="knobc" cx="790" cy="98" r="17"/><line class="arr" x1="790" y1="98" x2="790" y2="84"/></g>
+      <g class="knob" style="--a0:95deg;--a1:140deg;--a2:40deg"><circle class="knobc" cx="850" cy="98" r="17"/><line class="arr" x1="850" y1="98" x2="850" y2="84"/></g>
+      <g class="knob" style="--a0:-70deg;--a1:-130deg;--a2:-35deg"><circle class="knobc" cx="730" cy="152" r="17"/><line class="arr" x1="730" y1="152" x2="730" y2="138"/></g>
+      <g class="knob" style="--a0:170deg;--a1:60deg;--a2:15deg"><circle class="knobc" cx="790" cy="152" r="17"/><line class="arr" x1="790" y1="152" x2="790" y2="138"/></g>
+      <g class="knob" style="--a0:-160deg;--a1:-90deg;--a2:-45deg"><circle class="knobc" cx="850" cy="152" r="17"/><line class="arr" x1="850" y1="152" x2="850" y2="138"/></g>
+      <text class="sm" x="790" y="64" text-anchor="middle">perillas internas</text>
+      <text class="sm" x="790" y="196" text-anchor="middle">cada error las mueve un poco</text>
+    </svg>
+    <p class="cap">La animación se repite sola · Ejemplo simplificado</p>
+  </div>
+  <p class="small">Por dentro tiene <b>miles de millones</b> de "perillas" (son números). Cada error las mueve un poquito. Al final no le queda una biblioteca de textos: le quedan las perillas afinadas, o sea, los <b>patrones</b> de cómo se escribe.</p>
+  <p class="note">Esta etapa se llama <b>entrenamiento</b> y ocurre antes de que el modelo salga al público. Cuando vos le escribís, <b>ya no está aprendiendo</b>: está usando lo que aprendió.</p>
+</section>
+
+<!-- 7 · Predice la palabra que sigue -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Cuando lo usás</span>
+  <h2>Predice la palabra que sigue</h2>
+  <p>Es como el <b>teclado predictivo del celular</b>, pero muchísimo más potente: mira todo lo que hay escrito y calcula qué palabra tiene más chances de venir después.</p>
+  <div class="card" style="padding:1vh 1vw">
+    <svg class="viz anim" viewBox="0 0 900 215" role="img" aria-label="Animación: con el contexto de que son las 21 horas, para completar la frase Hola, buenas, la palabra noches tiene muchas más chances que tardes, días o pizzas. El modelo elige noches">
       <text class="mono" x="20" y="30" style="font-size:17px">Son las 21:00  →  "Hola, buenas ______"</text>
       <text class="b" x="20" y="74">noches</text><rect class="ghost" x="130" y="54" width="560" height="28" rx="7"/><rect class="fbar grow g1" x="130" y="54" width="500" height="28" rx="7"/>
       <text class="b" x="20" y="114">tardes</text><rect class="ghost" x="130" y="94" width="560" height="28" rx="7"/><rect class="fbar grow g2" x="130" y="94" width="52" height="28" rx="7"/>
@@ -422,105 +488,197 @@ html,body{transition:background .3s,color .3s}
     <p class="cap">La animación se repite sola · Las barras son ilustrativas, no valores reales de un modelo</p>
   </div>
   <div class="grid">
-    <div class="card"><h3>🕘 El contexto manda</h3><p class="small">A las 21:00, lo esperable es "noches". Con otro contexto, la palabra más probable <b>cambia</b>.</p></div>
-    <div class="card"><h3>🧠 No "entiende" como una persona</h3><p class="small">Leyó tanto texto que hace un <b>mapeo matemático</b> muy complejo, y lo expresa de forma muy natural.</p></div>
+    <div class="card"><h3>🕘 El contexto manda</h3><p class="small">A las 21:00, lo esperable es "noches". Si cambia el contexto, <b>cambia la palabra más probable</b>.</p></div>
+    <div class="card"><h3>🧮 No "entiende" como una persona</h3><p class="small">Hace un <b>cálculo matemático enorme</b> sobre qué palabra encaja mejor. Lo sorprendente es lo natural que suena.</p></div>
   </div>
-  <p class="note">En resumen: <b>simula</b> el comportamiento humano calculando qué palabra debería ir después de otra.</p>
 </section>
 
-<!-- 7 · IA e IA generativa -->
+<!-- 8 · Escribe de a un pedacito -->
+<section class="slide">
+  <h2>Y así escribe toda la respuesta: de a un pedacito</h2>
+  <p>No arma la respuesta completa y después la muestra. <b>Agrega un pedacito, vuelve a leer todo, y calcula el siguiente.</b></p>
+  <div class="card anim" style="padding:3vh 1.5vw">
+    <p class="typing" role="img" aria-label="Animación: a partir de Hola, buenas, el modelo va agregando de a un pedacito: noches, punto, En, qué, te, puedo, ayudar, signo de pregunta"><span class="base">Hola, buenas</span><span class="q1"> noches</span><span class="q2">.</span><span class="q3"> ¿En</span><span class="q4"> qué</span><span class="q5"> te</span><span class="q6"> puedo</span><span class="q7"> ayudar</span><span class="q8">?</span></p>
+    <div class="flow loop" style="margin-top:2.4vh">
+      <div class="node n1">1 · Lee todo lo escrito</div><span class="arrow">→</span>
+      <div class="node n2">2 · Calcula qué puede seguir</div><span class="arrow">→</span>
+      <div class="node n3">3 · Elige un pedacito y lo agrega</div><span class="arrow">↺</span>
+    </div>
+    <p class="cap" style="margin-top:1.6vh">La animación se repite sola · En gris, lo que ya estaba; en naranja, lo que va agregando</p>
+  </div>
+  <p class="note">Por eso ves que ChatGPT "escribe" de a poco. <b>No es un efecto visual:</b> realmente va generando la respuesta pedacito por pedacito.</p>
+</section>
+
+<!-- 9 · IA e IA generativa -->
 <section class="slide">
   <h2>IA e IA generativa</h2>
-  <p>Todo lo que vimos hasta acá es <b>Inteligencia Artificial</b>. Pero <b>no toda la IA crea contenido</b>.</p>
+  <p>Todo lo que vimos es <b>Inteligencia Artificial</b>. Pero <b>no toda la IA crea contenido</b>.</p>
   <div class="grid">
     <div class="card">
       <span class="tag">analiza · clasifica · predice</span>
       <h3>IA (en general)</h3>
-      <p class="small">Trabaja a partir de datos. Responde, pero <b>no crea nada nuevo</b>.</p>
+      <p class="small">Mira datos y saca una conclusión. Responde, pero <b>no crea nada nuevo</b>.</p>
       <ul class="small" style="margin-top:1vh">
-        <li>El <b>filtro de spam</b> de tu correo decide si un mail es spam o no.</li>
-        <li>Una <b>app de mapas</b> estima cuánto vas a tardar en llegar.</li>
+        <li>El <b>filtro de spam</b>: ¿este mail es spam, sí o no?</li>
+        <li>La <b>app de mapas</b>: ¿cuánto vas a tardar en llegar?</li>
       </ul>
     </div>
     <div class="card">
       <span class="tag">crea contenido nuevo</span>
       <h3>IA generativa</h3>
-      <p class="small">Genera <b>texto, imágenes, audio o código</b> a partir de una instrucción.</p>
+      <p class="small">Produce <b>texto, imágenes, audio o código</b> a partir de un pedido.</p>
       <ul class="small" style="margin-top:1vh">
         <li><b>ChatGPT</b> redactando un mail.</li>
-        <li>Una herramienta que <b>genera una imagen</b> a partir de una descripción.</li>
+        <li>Una herramienta que <b>dibuja una imagen</b> a partir de una descripción.</li>
       </ul>
     </div>
   </div>
   <p class="note">Los LLM son <b>IA generativa aplicada al texto</b>. En este curso vamos a usar las dos caras: le vamos a pedir a un LLM que <b>clasifique</b> (como haría un filtro) y también que <b>redacte</b> respuestas.</p>
 </section>
 
-<!-- 8 · Cómo procesa un mensaje -->
+<!-- 10 · El viaje de tu mensaje -->
 <section class="slide">
   <span class="tag" style="align-self:flex-start">Por dentro</span>
-  <h2>Cómo procesa un mensaje un LLM</h2>
+  <h2>El viaje de tu mensaje</h2>
+  <p>Desde que apretás Enter hasta que aparece cada palabra, tu mensaje pasa por <b>cinco estaciones</b>.</p>
   <div class="card" style="padding:1vh 1vw">
-    <svg class="viz anim" viewBox="0 0 900 215" role="img" aria-label="Animación: el texto entra al tokenizador y sale convertido en tokens; la red neuronal calcula probabilidades; y el modelo elige el siguiente token">
-      <line class="wire" x1="20" y1="110" x2="880" y2="110"/>
-      <rect class="box" x="130" y="80" width="140" height="60" rx="12"/><text class="b" x="200" y="116" text-anchor="middle">Tokenizador</text>
-      <rect class="box m" x="380" y="80" width="140" height="60" rx="12"/><text class="b" x="450" y="116" text-anchor="middle">Red neuronal</text>
-      <rect class="box o" x="630" y="80" width="140" height="60" rx="12"/><text class="wt" x="700" y="116" text-anchor="middle">Elige</text>
-      <g class="st1"><text class="b" x="65" y="58" text-anchor="middle">texto</text><text class="mono" x="65" y="172" text-anchor="middle">"Buenos"</text></g>
-      <g class="st2"><text class="b" x="325" y="58" text-anchor="middle">tokens</text><text class="mono" x="325" y="172" text-anchor="middle">[Buen] [os]</text></g>
-      <g class="st3"><text class="b" x="575" y="58" text-anchor="middle">probabilidades</text><text class="mono" x="575" y="172" text-anchor="middle">días: alta</text><text class="mono" x="575" y="190" text-anchor="middle">tardes: baja</text></g>
-      <g class="st4"><text class="b" x="835" y="58" text-anchor="middle">siguiente</text><text class="mono" x="835" y="172" text-anchor="middle">" días"</text></g>
-      <circle class="tok tok5" cx="835" cy="110" r="10" style="--x0:-770px;--y0:0px;--x1:-770px;--y1:0px;--x2:-510px;--y2:0px;--x3:-260px;--y3:0px"/>
+    <svg class="viz anim" viewBox="0 0 900 215" role="img" aria-label="Animación: el mensaje Hola, buenas pasa por cinco estaciones. Uno, cortar el texto en pedacitos. Dos, pasar cada pedacito a un número. Tres, relacionar las palabras entre sí. Cuatro, calcular las probabilidades de lo que sigue. Cinco, elegir el siguiente pedacito. Después vuelve a empezar">
+      <text class="mono" x="450" y="22" text-anchor="middle" style="font-size:16px">Tu mensaje: "Hola, buenas"</text>
+      <line class="wire" x1="20" y1="92" x2="880" y2="92"/>
+      <text class="sm" x="90" y="54" text-anchor="middle">tokens</text><text class="sm" x="270" y="54" text-anchor="middle">números</text><text class="sm" x="450" y="54" text-anchor="middle">atención</text><text class="sm" x="630" y="54" text-anchor="middle">probabilidades</text><text class="sm" x="810" y="54" text-anchor="middle">resultado</text>
+      <rect class="box" x="20" y="64" width="140" height="56" rx="12"/><text class="b" x="90" y="98" text-anchor="middle">1 · Cortar</text>
+      <rect class="box" x="200" y="64" width="140" height="56" rx="12"/><text class="b" x="270" y="98" text-anchor="middle">2 · Numerar</text>
+      <rect class="box" x="380" y="64" width="140" height="56" rx="12"/><text class="b" x="450" y="98" text-anchor="middle">3 · Relacionar</text>
+      <rect class="box" x="560" y="64" width="140" height="56" rx="12"/><text class="b" x="630" y="98" text-anchor="middle">4 · Calcular</text>
+      <rect class="box" x="740" y="64" width="140" height="56" rx="12"/><text class="b" x="810" y="98" text-anchor="middle">5 · Elegir</text>
+      <g class="x1"><rect class="box o" x="20" y="64" width="140" height="56" rx="12"/><text class="wt" x="90" y="98" text-anchor="middle">1 · Cortar</text></g>
+      <g class="x2"><rect class="box o" x="200" y="64" width="140" height="56" rx="12"/><text class="wt" x="270" y="98" text-anchor="middle">2 · Numerar</text></g>
+      <g class="x3"><rect class="box o" x="380" y="64" width="140" height="56" rx="12"/><text class="wt" x="450" y="98" text-anchor="middle">3 · Relacionar</text></g>
+      <g class="x4"><rect class="box o" x="560" y="64" width="140" height="56" rx="12"/><text class="wt" x="630" y="98" text-anchor="middle">4 · Calcular</text></g>
+      <g class="x5"><rect class="box o" x="740" y="64" width="140" height="56" rx="12"/><text class="wt" x="810" y="98" text-anchor="middle">5 · Elegir</text></g>
+      <g class="q1"><text class="mono" x="90" y="146" text-anchor="middle">[Hola] [,]</text><text class="mono" x="90" y="164" text-anchor="middle">[ buenas]</text></g>
+      <g class="q2"><text class="mono" x="270" y="146" text-anchor="middle">4821 · 11</text><text class="mono" x="270" y="164" text-anchor="middle">· 9034</text></g>
+      <g class="q3"><text class="sm" x="450" y="146" text-anchor="middle">¿qué palabras</text><text class="sm" x="450" y="164" text-anchor="middle">pesan más?</text></g>
+      <g class="q4"><text class="mono" x="630" y="146" text-anchor="middle">noches: alta</text><text class="mono" x="630" y="164" text-anchor="middle">tardes: baja</text></g>
+      <g class="q5"><text class="t-ok" x="810" y="155" text-anchor="middle">"noches"</text></g>
+      <text class="sm" x="450" y="200" text-anchor="middle">…y vuelve a la estación 1 con el pedacito nuevo agregado, hasta terminar la respuesta</text>
     </svg>
-    <p class="cap">La animación se repite sola · El corte en tokens es ilustrativo</p>
+    <p class="cap">La animación se repite sola · Los cortes y los números son de ejemplo</p>
   </div>
   <table>
     <tr><th>Palabra</th><th>Qué significa</th></tr>
-    <tr><td>inferencia</td><td>La fase de <b>ejecución</b>: la red, ya entrenada, predice y genera el siguiente fragmento de texto basándose <b>estrictamente en el contexto que recibe</b>.</td></tr>
-    <tr><td>atención</td><td>El mecanismo con el que la red decide <b>qué partes del texto pesan más</b> para elegir lo que sigue.</td></tr>
+    <tr><td>inferencia</td><td>El nombre técnico de <b>todo este recorrido</b>: el modelo, ya entrenado, usa lo que aprendió para generar el texto que sigue, basándose <b>únicamente en lo que recibe</b>.</td></tr>
   </table>
-  <p class="note">Y se repite: genera un fragmento, lo suma al texto y vuelve a calcular el siguiente. Así, <b>de a un paso</b>, se escribe toda la respuesta.</p>
+  <p class="note">Las estaciones 4 y 5 ya las conocés: son las barras de "noches". Miremos las otras de cerca.</p>
 </section>
 
-<!-- 9 · Tokens -->
+<!-- 11 · Tokens y números -->
 <section class="slide">
-  <h2>Tokens: el verdadero idioma del LLM</h2>
-  <p class="big">Un LLM no lee palabras: lee <b>tokens</b>. Un token puede ser una <b>palabra entera</b>, una <b>sílaba</b> o incluso <b>una sola letra</b>.</p>
-  <div class="chips" role="img" aria-label="La frase Hola, compré un buzo y todavía no me llegó, cortada en catorce tokens">
-    <span>Hola</span><span>,</span><span> compr</span><span>é</span><span> un</span><span> bu</span><span>zo</span><span> y</span><span> todavía</span><span> no</span><span> me</span><span> lleg</span><span>ó</span><span>.</span>
+  <span class="tag" style="align-self:flex-start">Estaciones 1 y 2</span>
+  <h2>Cortar en pedacitos y pasarlos a números</h2>
+  <p class="big">La IA no lee palabras: lee pedacitos llamados <b>tokens</b>. Y ni siquiera ve letras: <b>ve números</b>.</p>
+  <div class="chips cut anim" role="img" aria-label="Animación: la frase Hola, compré un buzo y todavía no me llegó se corta en catorce pedacitos, y debajo de cada pedacito aparece un número">
+    <span>Hola<i>4821</i></span><span>,<i>11</i></span><span> compr<i>30755</i></span><span>é<i>302</i></span><span> un<i>537</i></span><span> bu<i>2190</i></span><span>zo<i>8644</i></span><span> y<i>88</i></span><span> todavía<i>15093</i></span><span> no<i>412</i></span><span> me<i>669</i></span><span> lleg<i>27410</i></span><span>ó<i>305</i></span><span>.<i>13</i></span>
   </div>
-  <p class="cap">Ejemplo ilustrativo: 9 palabras, 14 tokens · Cada modelo corta el texto a su manera</p>
+  <p class="cap">La animación se repite sola · Ejemplo ilustrativo: 9 palabras, 14 tokens · Cada modelo corta y numera a su manera</p>
   <div class="grid">
-    <div class="card"><h3>✂️ El tokenizador</h3><p class="small">El algoritmo que <b>comprime y segmenta</b> el texto antes de que llegue al modelo. No corta por espacios: usa algoritmos estadísticos de <b>subpalabras</b>. El más común es <b>BPE</b> (Byte-Pair Encoding).</p></div>
-    <div class="card"><h3>📏 Por qué te importa</h3><p class="small">Todo se mide en tokens: el <b>límite</b> de texto que el modelo puede manejar y, en las APIs en la nube, el <b>costo</b> (se cobra por token de entrada y de salida).</p></div>
+    <div class="card"><h3>🧱 Como piezas de Lego</h3><p class="small">Un token puede ser una <b>palabra entera</b>, una <b>sílaba</b> o <b>una sola letra</b>. Con una caja limitada de piezas puede armar cualquier palabra, incluso una que nunca vio.</p></div>
+    <div class="card"><h3>📏 Por qué te importa</h3><p class="small">Todo se mide en tokens: el <b>límite</b> de texto que el modelo puede manejar y, en los servicios pagos, el <b>costo</b> (se cobra por token que entra y que sale).</p></div>
   </div>
-  <p class="note"><b>Importante:</b> cada modelo está entrenado de forma distinta y usa tokenizaciones distintas. Por eso <b>no todos los modelos son buenos para todo</b>.</p>
+  <p class="note"><b>Importante:</b> cada modelo se entrenó distinto y corta el texto distinto. Por eso <b>no todos los modelos son buenos para todo</b>.</p>
 </section>
 
-<!-- 10 · BPE -->
+<!-- 12 · BPE -->
 <section class="slide">
   <span class="tag" style="align-self:flex-start">Para curiosos</span>
-  <h2>BPE: cómo decide dónde cortar</h2>
-  <p>BPE arma su lista de tokens <b>juntando los pares de letras que más se repiten</b> en los textos con los que se lo prepara.</p>
-  <div class="flow">
-    <div class="node">Letras sueltas<small>a · u · t · o</small></div><span class="arrow">→</span>
-    <div class="node m">Une el par más frecuente<small>a + u → au</small></div><span class="arrow">→</span>
-    <div class="node">Repite miles de veces<small>au + to → auto</small></div><span class="arrow">→</span>
-    <div class="node o">Lista de tokens<small>auto · ción · mente · …</small></div>
+  <h2>¿Quién decide dónde cortar?</h2>
+  <p>Un programa llamado <b>tokenizador</b>. No corta por espacios: el método más usado se llama <b>BPE</b> (Byte-Pair Encoding) y la idea es simple: <b>pegar las letras que más veces aparecen juntas</b>.</p>
+  <div class="card" style="padding:1vh 1vw">
+    <svg class="viz anim" viewBox="0 0 900 190" role="img" aria-label="Animación: la palabra auto empieza como cuatro letras sueltas. Primero se unen la a y la u. Después la t y la o. Al final queda una sola pieza: auto">
+      <g class="q1"><text class="b" x="20" y="38">1. Empieza con letras sueltas</text>
+        <rect class="box" x="420" y="14" width="46" height="36" rx="8"/><text class="mono" x="443" y="38" text-anchor="middle">a</text><rect class="box" x="472" y="14" width="46" height="36" rx="8"/><text class="mono" x="495" y="38" text-anchor="middle">u</text><rect class="box" x="524" y="14" width="46" height="36" rx="8"/><text class="mono" x="547" y="38" text-anchor="middle">t</text><rect class="box" x="576" y="14" width="46" height="36" rx="8"/><text class="mono" x="599" y="38" text-anchor="middle">o</text></g>
+      <g class="q2"><text class="b" x="20" y="82">2. Pega el par que más se repite</text>
+        <rect class="box m" x="420" y="58" width="98" height="36" rx="8"/><text class="mono" x="469" y="82" text-anchor="middle">au</text><rect class="box" x="524" y="58" width="46" height="36" rx="8"/><text class="mono" x="547" y="82" text-anchor="middle">t</text><rect class="box" x="576" y="58" width="46" height="36" rx="8"/><text class="mono" x="599" y="82" text-anchor="middle">o</text></g>
+      <g class="q3"><text class="b" x="20" y="126">3. Vuelve a pegar</text>
+        <rect class="box m" x="420" y="102" width="98" height="36" rx="8"/><text class="mono" x="469" y="126" text-anchor="middle">au</text><rect class="box m" x="524" y="102" width="98" height="36" rx="8"/><text class="mono" x="573" y="126" text-anchor="middle">to</text></g>
+      <g class="q4"><text class="b" x="20" y="170">4. Queda una pieza nueva</text>
+        <rect class="box o" x="420" y="146" width="202" height="36" rx="8"/><text class="wt" x="521" y="170" text-anchor="middle">auto</text><text class="t-ok" x="640" y="170">una pieza lista para usar</text></g>
+    </svg>
+    <p class="cap">La animación se repite sola · Ejemplo simplificado</p>
   </div>
   <div class="grid">
-    <div class="card ok"><span class="tag ok">texto común</span><p class="small">Las palabras muy frecuentes terminan siendo <b>un solo token</b>.</p></div>
-    <div class="card bad"><span class="tag bad">texto raro</span><p class="small">Las palabras poco frecuentes se parten en <b>varios pedazos</b> conocidos.</p></div>
+    <div class="card ok"><span class="tag ok">texto común</span><p class="small">Las palabras muy frecuentes terminan siendo <b>una sola pieza</b>.</p></div>
+    <div class="card bad"><span class="tag bad">texto raro</span><p class="small">Las palabras poco frecuentes se arman con <b>varias piezas</b> más chicas.</p></div>
   </div>
-  <p class="note">No hace falta saber BPE para automatizar. Sí sirve la intuición: <b>el modelo no ve tus palabras, ve pedazos</b>, y la cantidad de pedazos es lo que cuenta para el límite y para el costo.</p>
+  <p class="note">No hace falta saber BPE para automatizar. Alcanza con la idea: <b>el modelo no ve tus palabras, ve piezas</b>, y la cantidad de piezas es lo que cuenta para el límite y para el costo.</p>
 </section>
 
-<!-- 11 · Ventana de contexto -->
+<!-- 13 · Atención -->
 <section class="slide">
-  <h2>Ventana de contexto</h2>
-  <p>Hay un límite a la cantidad de tokens que un LLM puede "tener en mente" al mismo tiempo. Ese límite es la <b>ventana de contexto</b>.</p>
+  <span class="tag" style="align-self:flex-start">Estación 3</span>
+  <h2>Relacionar: mirar las palabras anteriores</h2>
+  <p>Una palabra sola puede querer decir varias cosas. Para saber cuál, el modelo <b>mira las palabras que ya leyó</b> y decide cuáles pesan más.</p>
   <div class="card" style="padding:1vh 1vw">
-    <svg class="viz anim" viewBox="0 0 900 190" role="img" aria-label="Animación: una ventana de tamaño fijo se desliza sobre un texto que crece. Al principio entran los seis bloques. Cuando el texto llega a nueve bloques, los tres primeros quedan afuera. Cuando llega a doce, los seis primeros quedan afuera y el modelo ya no los ve">
-      <text class="grp" x="450" y="24" text-anchor="middle">EL TEXTO CRECE · LA VENTANA TIENE TAMAÑO FIJO (6 BLOQUES)</text>
+    <svg class="viz anim" viewBox="0 0 900 200" role="img" aria-label="Animación: en la frase En la plaza me senté en el banco, la palabra banco se conecta hacia atrás con plaza y con senté, y significa asiento. En la frase Fui a sacar plata al banco, se conecta hacia atrás con sacar y con plata, y significa el lugar donde se guarda el dinero. Las flechas siempre van hacia las palabras anteriores">
+      <text class="grp" x="450" y="24" text-anchor="middle">¿QUÉ SIGNIFICA "BANCO"? · SOLO PUEDE MIRAR HACIA ATRÁS</text>
+      <g class="w1">
+        <path class="arr" d="M770,88 Q535,4 300,92"/><path class="arr" d="M770,88 Q630,34 490,92"/>
+        <text x="100" y="116" text-anchor="middle">En</text><text x="190" y="116" text-anchor="middle">la</text><text class="b" x="300" y="116" text-anchor="middle">plaza</text><text x="400" y="116" text-anchor="middle">me</text><text class="b" x="490" y="116" text-anchor="middle">senté</text><text x="590" y="116" text-anchor="middle">en</text><text x="660" y="116" text-anchor="middle">el</text>
+        <rect class="box o" x="726" y="92" width="88" height="36" rx="10"/><text class="wt" x="770" y="116" text-anchor="middle">banco</text>
+        <text class="t-ok" x="450" y="168" text-anchor="middle">Acá "banco" es un asiento</text>
+      </g>
+      <g class="w2">
+        <path class="arr" d="M730,88 Q550,4 370,92"/><path class="arr" d="M730,88 Q615,38 500,92"/>
+        <text x="160" y="116" text-anchor="middle">Fui</text><text x="260" y="116" text-anchor="middle">a</text><text class="b" x="370" y="116" text-anchor="middle">sacar</text><text class="b" x="500" y="116" text-anchor="middle">plata</text><text x="610" y="116" text-anchor="middle">al</text>
+        <rect class="box o" x="686" y="92" width="88" height="36" rx="10"/><text class="wt" x="730" y="116" text-anchor="middle">banco</text>
+        <text class="t-ok" x="450" y="168" text-anchor="middle">Acá "banco" es donde guardás la plata</text>
+      </g>
+      <g class="w3">
+        <text class="b" x="450" y="98" text-anchor="middle" style="font-size:22px">La misma palabra, dos sentidos.</text>
+        <text x="450" y="132" text-anchor="middle" style="font-size:18px">Lo resuelve mirando las palabras que vinieron antes.</text>
+      </g>
+    </svg>
+    <p class="cap">La animación se repite sola · Las flechas van siempre hacia atrás: hacia lo que ya está escrito</p>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>👀 Se llama "atención"</h3><p class="small">Es el nombre técnico de este mecanismo: darle <b>más peso</b> a las palabras anteriores que ayudan a entender cada una.</p></div>
+    <div class="card"><h3>⬅️ Nunca mira hacia adelante</h3><p class="small">Lee en orden y no ve lo que todavía no se escribió. Cuando te responde, <b>tu mensaje completo ya quedó atrás</b>: por eso lo tiene todo en cuenta.</p></div>
+  </div>
+  <p class="note"><b>Por eso importa cómo escribís:</b> si en tu pedido faltan las palabras que dan contexto, el modelo tiene menos de dónde agarrarse.</p>
+</section>
+
+<!-- 14 · Calcular y elegir con azar -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Estaciones 4 y 5</span>
+  <h2>Calcular y elegir, con una pizca de azar</h2>
+  <p>El modelo le pone una probabilidad a cada pedacito posible y elige uno. Casi siempre, el más probable. <b>Pero no siempre.</b></p>
+  <div class="card" style="padding:1vh 1vw">
+    <svg class="viz anim" viewBox="0 0 900 180" role="img" aria-label="Animación: la misma frase se completa tres veces. La primera y la segunda vez el modelo elige noches. La tercera vez elige tardes, que era menos probable">
+      <text class="mono" x="20" y="28" style="font-size:16px">"Hola, buenas ______"</text>
+      <text class="b" x="20" y="72">noches</text><rect class="ghost" x="130" y="52" width="470" height="28" rx="7"/><rect class="fbar" x="130" y="52" width="410" height="28" rx="7"/>
+      <text class="b" x="20" y="112">tardes</text><rect class="ghost" x="130" y="92" width="470" height="28" rx="7"/><rect class="fbar" x="130" y="92" width="46" height="28" rx="7"/>
+      <text class="b" x="20" y="152">días</text><rect class="ghost" x="130" y="132" width="470" height="28" rx="7"/><rect class="fbar" x="130" y="132" width="12" height="28" rx="6"/>
+      <g class="w1"><rect class="win" x="12" y="46" width="594" height="40" rx="8"/><text class="grp" x="640" y="90">PRIMERA VEZ</text><text class="b" x="640" y="118" style="font-size:20px">elige "noches"</text></g>
+      <g class="w2"><rect class="win" x="12" y="46" width="594" height="40" rx="8"/><text class="grp" x="640" y="90">SEGUNDA VEZ</text><text class="b" x="640" y="118" style="font-size:20px">elige "noches"</text></g>
+      <g class="w3"><rect class="win" x="12" y="86" width="594" height="40" rx="8"/><text class="grp" x="640" y="90">TERCERA VEZ</text><text class="b" x="640" y="118" style="font-size:20px">elige "tardes"</text><text class="sm" x="640" y="142">menos probable, pero posible</text></g>
+    </svg>
+    <p class="cap">La animación se repite sola · Barras ilustrativas</p>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>🎡 Una ruleta cargada</h3><p class="small">La opción más probable ocupa casi toda la ruleta, pero las demás <b>también tienen su lugar</b>.</p></div>
+    <div class="card"><h3>🔁 La consecuencia</h3><p class="small">La misma pregunta puede dar <b>respuestas distintas</b> cada vez que la hacés.</p></div>
+  </div>
+  <p class="note">Para charlar, esa variedad está buenísima. Para <b>automatizar</b> es un problema, y lo resolvemos con un buen prompt: uno que le deje <b>menos opciones</b>.</p>
+</section>
+
+<!-- 15 · Ventana de contexto -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Sus límites</span>
+  <h2>La ventana de contexto: una hoja de tamaño fijo</h2>
+  <p>El modelo trabaja sobre una "hoja" donde tiene que entrar <b>todo</b>: instrucciones, datos, conversación y respuesta. Esa hoja es la <b>ventana de contexto</b>.</p>
+  <div class="card" style="padding:1vh 1vw">
+    <svg class="viz anim" viewBox="0 0 900 150" role="img" aria-label="Animación: una ventana de tamaño fijo se desliza sobre un texto que crece. Al principio entran los seis bloques. Cuando el texto llega a nueve bloques, los tres primeros quedan afuera. Cuando llega a doce, los seis primeros quedan afuera y el modelo ya no los ve">
+      <text class="grp" x="450" y="24" text-anchor="middle">LA CONVERSACIÓN CRECE · LA HOJA TIENE TAMAÑO FIJO (6 BLOQUES)</text>
       <rect class="cell" x="90" y="52" width="60" height="42"/><rect class="cell" x="150" y="52" width="60" height="42"/><rect class="cell" x="210" y="52" width="60" height="42"/><rect class="cell" x="270" y="52" width="60" height="42"/><rect class="cell" x="330" y="52" width="60" height="42"/><rect class="cell" x="390" y="52" width="60" height="42"/>
       <rect class="ghost" x="450" y="52" width="60" height="42"/><rect class="ghost" x="510" y="52" width="60" height="42"/><rect class="ghost" x="570" y="52" width="60" height="42"/><rect class="ghost" x="630" y="52" width="60" height="42"/><rect class="ghost" x="690" y="52" width="60" height="42"/><rect class="ghost" x="750" y="52" width="60" height="42"/>
       <g class="w1">
@@ -538,83 +696,111 @@ html,body{transition:background .3s,color .3s}
         <rect class="cell" x="450" y="52" width="60" height="42"/><rect class="cell" x="510" y="52" width="60" height="42"/><rect class="cell" x="570" y="52" width="60" height="42"/><rect class="cell" x="630" y="52" width="60" height="42"/><rect class="cell" x="690" y="52" width="60" height="42"/><rect class="cell" x="750" y="52" width="60" height="42"/>
         <rect class="out" x="90" y="52" width="360" height="42"/>
         <rect class="win" x="446" y="48" width="368" height="50" rx="6"/>
-        <text class="t-bad" x="270" y="130" text-anchor="middle">quedó afuera: ya no está disponible</text>
+        <text class="t-bad" x="270" y="130" text-anchor="middle">quedó afuera: para el modelo ya no existe</text>
         <text class="t-ok" x="630" y="130" text-anchor="middle">lo que el modelo ve</text>
       </g>
       <text class="sm" x="120" y="79" text-anchor="middle">1</text><text class="sm" x="180" y="79" text-anchor="middle">2</text><text class="sm" x="240" y="79" text-anchor="middle">3</text><text class="sm" x="300" y="79" text-anchor="middle">4</text><text class="sm" x="360" y="79" text-anchor="middle">5</text><text class="sm" x="420" y="79" text-anchor="middle">6</text><text class="sm" x="480" y="79" text-anchor="middle">7</text><text class="sm" x="540" y="79" text-anchor="middle">8</text><text class="sm" x="600" y="79" text-anchor="middle">9</text><text class="sm" x="660" y="79" text-anchor="middle">10</text><text class="sm" x="720" y="79" text-anchor="middle">11</text><text class="sm" x="780" y="79" text-anchor="middle">12</text>
-      <text class="sm" x="450" y="172" text-anchor="middle">Cada casilla es un bloque de tokens: instrucciones, datos, mensajes anteriores y respuestas</text>
     </svg>
-    <p class="cap">La animación se repite sola</p>
+    <p class="cap">La animación se repite sola · Cada casilla es un bloque de tokens</p>
   </div>
   <div class="grid">
-    <div class="card"><h3>📄 Una hoja de tamaño fijo</h3><p class="small">Si querés seguir escribiendo y ya no hay espacio, hay que <b>borrar el principio</b>.</p></div>
-    <div class="card"><h3>🚫 No "olvida de a poco"</h3><p class="small">No es como una persona: tiene un <b>límite fijo</b>. Lo que quedó afuera simplemente <b>deja de estar disponible</b>.</p></div>
+    <div class="card"><h3>📄 Si no hay más lugar</h3><p class="small">Para seguir escribiendo en una hoja llena, hay que <b>borrar el principio</b>.</p></div>
+    <div class="card"><h3>🚫 No "olvida de a poco"</h3><p class="small">No es como una persona. Tiene un <b>límite fijo</b>: lo que quedó afuera simplemente <b>deja de estar disponible</b>.</p></div>
   </div>
-  <p class="note">Hacer buenos prompts también es <b>no gastar contexto de más</b>: lo que entra en la ventana es lo único que el modelo puede usar para responder.</p>
+  <p class="note">Hacer buenos prompts también es <b>no gastar hoja de más</b>: lo que entra en la ventana es lo único que el modelo puede usar para responder.</p>
 </section>
 
-<!-- 12 · Alucinaciones -->
+<!-- 16 · Alucinaciones -->
 <section class="slide">
-  <h2>Alucinaciones</h2>
-  <p class="big">Una <b>alucinación</b> es cuando el modelo genera información <b>falsa, inventada o sin sentido</b>, y la presenta como si fuera una verdad absoluta.</p>
+  <h2>Alucinaciones: cuando inventa con total seguridad</h2>
+  <p class="big">Una <b>alucinación</b> es cuando el modelo da información <b>falsa o inventada</b> y la presenta como si fuera una verdad absoluta.</p>
+  <div class="card" style="padding:1vh 1vw">
+    <svg class="viz anim" viewBox="0 0 900 195" role="img" aria-label="Animación: sin el dato, ante la pregunta cuánto tarda el envío, la IA responde tu pedido llega en 24 horas, que es inventado. Con el dato en el prompt de que los envíos demoran 5 días hábiles, la IA responde demora 5 días hábiles, que es correcto">
+      <line class="wire" x1="450" y1="8" x2="450" y2="190"/>
+      <text class="grp" x="225" y="20" text-anchor="middle">SIN EL DATO</text>
+      <text class="grp" x="675" y="20" text-anchor="middle">CON EL DATO EN EL PROMPT</text>
+      <g class="q1"><rect class="box" x="20" y="34" width="410" height="54" rx="10"/><text class="mono" x="225" y="66" text-anchor="middle">Cliente: "¿Cuánto tarda el envío?"</text></g>
+      <g class="q2"><rect class="out" x="20" y="104" width="410" height="44" rx="10"/><text class="mono" x="225" y="131" text-anchor="middle">IA: "Tu pedido llega en 24 horas"</text><text class="t-bad" x="225" y="176" text-anchor="middle">Inventado: nadie le dijo cuánto tarda</text></g>
+      <g class="q3"><rect class="box" x="470" y="34" width="410" height="54" rx="10"/><text class="mono" x="675" y="57" text-anchor="middle">Dato: los envíos demoran 5 días hábiles</text><text class="mono" x="675" y="77" text-anchor="middle">Cliente: "¿Cuánto tarda el envío?"</text></g>
+      <g class="q4"><rect class="in" x="470" y="104" width="410" height="44" rx="10"/><text class="mono" x="675" y="131" text-anchor="middle">IA: "Demora 5 días hábiles"</text><text class="t-ok" x="675" y="176" text-anchor="middle">Correcto: lo leyó en el prompt</text></g>
+    </svg>
+    <p class="cap">La animación se repite sola · Ejemplo ilustrativo</p>
+  </div>
   <div class="card">
     <h3>🎓 El estudiante que no estudió</h3>
     <p class="small">Va al examen sin haber estudiado. El profesor pregunta y, en vez de decir "no sé", inventa una respuesta larguísima, con palabras sofisticadas y muchísima seguridad. <b>Suena tan convincente que casi le creés.</b></p>
   </div>
+</section>
+
+<!-- 17 · Por qué inventa -->
+<section class="slide">
+  <h2>¿Por qué inventa? ¿Y qué hacemos?</h2>
+  <p class="big">Acordate: su trabajo es <b>completar con lo más probable</b>. Si le falta un dato, no se frena: <b>completa igual</b>.</p>
   <div class="grid">
     <div class="card bad">
       <span class="tag bad">causa 1</span>
-      <h3>Se le fue de la ventana</h3>
-      <p class="small">La información clave ya no entra en su ventana de contexto. En vez de decir "no tengo esa información", <b>completa el vacío</b> con algo plausible.</p>
+      <h3>Se le fue de la hoja</h3>
+      <p class="small">La información ya no entra en su ventana de contexto. En vez de decir "no tengo ese dato", <b>rellena el hueco</b> con algo que suena bien.</p>
     </div>
     <div class="card bad">
       <span class="tag bad">causa 2</span>
       <h3>Nunca se la dimos</h3>
-      <p class="small">El dato no está en el prompt: por ejemplo, los plazos de envío de <b>tu</b> negocio. El modelo no puede adivinarlo, pero <b>responde igual</b>.</p>
+      <p class="small">El dato no está en el prompt: por ejemplo, los plazos de envío de <b>tu</b> negocio. No puede adivinarlo, pero <b>responde igual</b>.</p>
     </div>
   </div>
-  <p class="note">Por eso el <b>contexto</b> de un prompt importa tanto: lo que el modelo no puede adivinar, hay que dárselo. Es lo que vemos ahora.</p>
+  <div class="card ok">
+    <span class="tag ok">qué hacemos</span>
+    <ul class="small">
+      <li><b>Darle el dato</b> en el prompt: lo que no puede adivinar, se lo decimos.</li>
+      <li><b>Darle una salida</b> para cuando no sabe: "si no está claro, respondé <code>otro</code>".</li>
+      <li><b>Revisar</b> lo importante antes de confiar.</li>
+    </ul>
+  </div>
+  <p class="note">Las dos primeras se resuelven escribiendo mejor el pedido. Eso es lo que vemos ahora.</p>
 </section>
 
-<!-- 13 · Qué es un prompt -->
+<!-- 18 · Qué es un prompt -->
 <section class="slide">
   <span class="tag" style="align-self:flex-start">Prompt Engineering</span>
   <h2>¿Qué es un prompt?</h2>
-  <p class="big">Un <b>prompt</b> es el <b>puente de comunicación</b> entre nosotros y la IA: el texto o conjunto de instrucciones que le damos para obtener un resultado.</p>
+  <p class="big">Un <b>prompt</b> es el <b>puente de comunicación</b> entre nosotros y la IA: el texto con el que le pedimos algo.</p>
+  <div class="card">
+    <h3>🧑‍💼 Pensalo como un empleado nuevo, brillante, en su primer día</h3>
+    <p class="small">Sabe muchísimo en general. <b>No sabe nada de tu negocio.</b> Y hace exactamente lo que le pedís: si el pedido es vago, la respuesta también.</p>
+  </div>
   <div class="grid">
     <div class="card bad">
-      <span class="tag bad">genérico</span>
+      <span class="tag bad">pedido vago</span>
 <pre class="wrap">Armame una rutina para el gym</pre>
       <p class="small">Devuelve algo súper genérico.</p>
     </div>
     <div class="card ok">
-      <span class="tag ok">específico</span>
+      <span class="tag ok">pedido claro</span>
 <pre class="wrap">Armame una rutina para el gym de 3 días por semana, enfocada en piernas y espalda, de intensidad media.</pre>
-      <p class="small">Con grupo muscular, intensidad y frecuencia, la respuesta mejora.</p>
+      <p class="small">Con más detalle, la respuesta mejora.</p>
     </div>
   </div>
-  <p><b>Prompt Engineering</b> es la práctica de crear esas instrucciones de forma meticulosa, para obtener respuestas <b>precisas, correctas y alineadas</b> con lo que pedimos.</p>
-  <p class="note">No es solo "saber preguntar": es <b>diseñar, probar, refinar y optimizar</b>. Un pequeño cambio en un prompt puede cambiar por completo la respuesta.</p>
+  <p class="note"><b>Prompt Engineering</b> es la práctica de armar esos pedidos con cuidado. No es solo "saber preguntar": es <b>diseñar, probar, ajustar y volver a probar</b>.</p>
 </section>
 
-<!-- 14 · Anatomía -->
+<!-- 19 · Anatomía -->
 <section class="slide">
   <h2>La anatomía de un prompt efectivo</h2>
-  <p class="big">Un prompt que funciona no es más largo: es <b>más ordenado</b>.</p>
+  <p class="big">Un prompt que funciona no es más largo: es <b>más ordenado</b>. Le contesta cuatro preguntas al "empleado nuevo".</p>
   <table class="plain">
-    <tr><th>Componente</th><th>Qué define</th><th>Ejemplo</th></tr>
-    <tr><td>Rol</td><td><b>Quién</b> queremos que sea la IA al responder.</td><td><i>"Sos un asistente de atención al cliente de una tienda de indumentaria online."</i></td></tr>
-    <tr><td>Tarea</td><td><b>Qué</b> tiene que hacer, con un verbo concreto y sin ambigüedad.</td><td><i>"Clasificá el mensaje en una de estas tres categorías."</i></td></tr>
-    <tr><td>Contexto</td><td>La información que necesita y que <b>no puede adivinar</b>.</td><td><i>"Los envíos demoran 5 días hábiles; un pedido no es un reclamo hasta pasados esos 5 días."</i></td></tr>
-    <tr><td>Formato de salida</td><td><b>Cómo</b> queremos la respuesta, sobre todo si va a seguir viajando por una automatización.</td><td><i>"Devolvé únicamente la categoría, en minúscula, sin explicaciones."</i></td></tr>
+    <tr><th>Componente</th><th>La pregunta que contesta</th><th>Ejemplo</th></tr>
+    <tr><td>Rol</td><td>¿<b>Quién</b> sos acá?</td><td><i>"Sos un asistente de atención al cliente de una tienda de indumentaria online."</i></td></tr>
+    <tr><td>Tarea</td><td>¿<b>Qué</b> tenés que hacer? Con un verbo concreto, sin vueltas.</td><td><i>"Clasificá el mensaje en una de estas tres categorías."</i></td></tr>
+    <tr><td>Contexto</td><td>¿Qué necesitás saber que <b>no podés adivinar</b>?</td><td><i>"Los envíos demoran 5 días hábiles; un pedido no es un reclamo hasta pasados esos 5 días."</i></td></tr>
+    <tr><td>Formato de salida</td><td>¿<b>Cómo</b> me lo tenés que entregar?</td><td><i>"Devolvé únicamente la categoría, en minúscula, sin explicaciones."</i></td></tr>
   </table>
-  <p class="note">Los cuatro no son obligatorios siempre. Pero cuando el resultado sale <b>genérico o inconsistente</b>, casi siempre falta alguno.</p>
+  <p class="note">Los cuatro no son obligatorios siempre. Pero cuando el resultado sale <b>genérico o distinto cada vez</b>, casi siempre falta alguno.</p>
 </section>
 
-<!-- 15 · Delimitadores -->
+<!-- 20 · Delimitadores -->
 <section class="slide">
-  <h2>Delimitadores: separar la instrucción del dato</h2>
-  <p>En un mismo prompt conviven <b>nuestras instrucciones</b> y <b>el dato a procesar</b> (un mail, el comentario de un cliente, una fila de una planilla). La IA puede confundirlos y tomar el dato como si fuera una instrucción más.</p>
+  <h2>Delimitadores: qué es orden y qué es material para leer</h2>
+  <p>Muchas veces el prompt lleva un texto que escribió <b>otra persona</b>: un mail, un comentario, una fila de una planilla. Si no lo separás, la IA puede tomarlo como si fuera <b>una orden tuya</b>.</p>
   <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
     <div class="card">
       <span class="tag">numerales</span>
@@ -637,11 +823,11 @@ Hola, quería saber...
 &lt;/mensaje&gt;</pre>
     </div>
   </div>
-  <p class="small">No importa cuál elijas. Importa que sea <b>consistente</b> dentro del mismo prompt y que le digas a la IA <b>qué hay adentro</b>.</p>
-  <p class="note"><b>En una automatización esto pesa más que en un chat:</b> el texto que entra al prompt lo escribió otra persona y vos no controlás qué dice. Delimitarlo ayuda a que un mensaje del estilo <i>"ignorá lo anterior y hacé otra cosa"</i> no desvíe el flujo.</p>
+  <p class="small">Funcionan como las comillas cuando citás a alguien: <b>lo que está adentro lo dijo el cliente, no vos</b>. No importa cuál elijas: usá siempre el mismo dentro del prompt y decile a la IA qué hay adentro.</p>
+  <p class="note"><b>En una automatización esto pesa más que en un chat:</b> vos no controlás lo que escribe el cliente. Delimitarlo ayuda a que un mensaje del estilo <i>"ignorá lo anterior y hacé otra cosa"</i> no desvíe el flujo.</p>
 </section>
 
-<!-- 16 · Prompt malo -->
+<!-- 21 · Prompt malo -->
 <section class="slide">
   <span class="tag" style="align-self:flex-start">El mismo caso, mal y bien</span>
   <h2>Primero, mal</h2>
@@ -649,54 +835,54 @@ Hola, quería saber...
     <span class="tag bad">prompt malo</span>
 <pre class="wrap">Clasificá este mensaje: Hola, compré un buzo la semana pasada y todavía no me llegó.</pre>
   </div>
-  <p>No tiene <b>rol</b>, no define las <b>categorías</b> posibles, no da <b>contexto</b> y no pide un <b>formato</b>. Cada vez que corre puede devolver algo distinto:</p>
+  <p>No dice <b>quién es</b> la IA, ni cuáles son las <b>categorías</b>, ni da <b>contexto</b>, ni pide un <b>formato</b>. Con tantas opciones abiertas, la ruleta puede caer en cualquier lado:</p>
   <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
     <div class="card"><h3>A veces</h3><p class="small">Una palabra: <code>reclamo</code></p></div>
-    <div class="card"><h3>A veces</h3><p class="small">Un párrafo empático sobre la demora del buzo.</p></div>
+    <div class="card"><h3>A veces</h3><p class="small">Un párrafo comprensivo sobre la demora del buzo.</p></div>
     <div class="card"><h3>A veces</h3><p class="small">Una repregunta: pide más datos antes de contestar.</p></div>
   </div>
-  <p class="note">Para chatear, alcanza. Para <b>automatizar</b> no sirve: el paso siguiente del flujo <b>no sabe qué le va a llegar</b>.</p>
+  <p class="note">Para charlar, alcanza. Para <b>automatizar</b> no sirve: el paso siguiente del flujo <b>no sabe qué le va a llegar</b>.</p>
 </section>
 
-<!-- 17 · Prompt bueno -->
+<!-- 22 · Prompt bueno (se arma pieza por pieza) -->
 <section class="slide">
-  <h2>Ahora, bien</h2>
-  <div class="grid" style="grid-template-columns:1.9fr 1fr;align-items:stretch">
-<pre class="wrap"><span class="c"># ROL</span>
+  <h2>Ahora, bien: lo armamos pieza por pieza</h2>
+  <div class="grid anim" style="grid-template-columns:1.9fr 1fr;align-items:stretch">
+<pre class="wrap"><span class="b1"><span class="c"># 1 · ROL</span>
 Sos un asistente de atención al cliente de una tienda de indumentaria online.
-
-<span class="c"># TAREA</span>
+</span>
+<span class="b2"><span class="c"># 2 · TAREA</span>
 Clasificá el mensaje del cliente que está entre los delimitadores en una de estas tres categorías: <span class="f">consulta_talle</span>, <span class="f">reclamo_envio</span>, <span class="f">otro</span>.
-
-<span class="c"># CONTEXTO</span>
+</span>
+<span class="b3"><span class="c"># 3 · CONTEXTO</span>
 Contexto: los envíos demoran 5 días hábiles. Un pedido no se considera reclamo hasta pasados esos 5 días.
-
-<span class="c"># DATO, ENTRE DELIMITADORES</span>
+</span>
+<span class="b4"><span class="c"># 4 · EL DATO, ENTRE DELIMITADORES</span>
 Mensaje del cliente:
 <span class="k">###</span>
 <span class="s">Hola, compré un buzo la semana pasada y todavía no me llegó.</span>
 <span class="k">###</span>
-
-<span class="c"># FORMATO DE SALIDA</span>
-Devolvé únicamente la categoría, en minúscula, sin explicación ni texto adicional.</pre>
-    <div class="card ok">
+</span>
+<span class="b5"><span class="c"># 5 · FORMATO DE SALIDA</span>
+Devolvé únicamente la categoría, en minúscula, sin explicación ni texto adicional.</span></pre>
+    <div class="card ok b6">
       <span class="tag ok">respuesta</span>
 <pre>reclamo_envio</pre>
       <ul class="small" style="margin-top:1.4vh">
         <li><b>Categorías cerradas:</b> solo puede elegir una de tres.</li>
         <li><b>Mismo formato</b> en cada ejecución.</li>
-        <li>Listo para que un <b>nodo If</b> lo use sin limpiarlo.</li>
+        <li>Lista para que el paso siguiente la use <b>sin limpiarla</b>.</li>
       </ul>
     </div>
   </div>
-  <p class="cap">Las líneas grises con # son etiquetas para la clase: no forman parte del prompt</p>
-  <p class="note">Esa consistencia es la diferencia entre un prompt que sirve para <b>chatear</b> y uno que sirve para <b>automatizar</b>.</p>
+  <p class="cap">La animación se repite sola · Las líneas grises con # son etiquetas para la clase: no forman parte del prompt</p>
+  <p class="note">Le sacamos opciones a la ruleta. Esa consistencia es la diferencia entre un prompt que sirve para <b>chatear</b> y uno que sirve para <b>automatizar</b>.</p>
 </section>
 
-<!-- 18 · Por qué importa el formato -->
+<!-- 23 · Por qué importa el formato -->
 <section class="slide">
   <h2>Por qué importa tanto el formato de salida</h2>
-  <p>En una automatización, la respuesta de la IA <b>no la lee una persona</b>: la lee el paso siguiente del flujo.</p>
+  <p>En una automatización, la respuesta de la IA <b>no la lee una persona</b>. La lee el paso siguiente, que es una regla simple del tipo <i>"si dice X, hacé Y"</i>. En n8n ese paso se llama <b>nodo If</b>.</p>
   <div class="card" style="padding:1vh 1vw">
     <svg class="viz anim" viewBox="0 0 900 215" role="img" aria-label="Animación: el mensaje del cliente entra al paso de IA, que devuelve la palabra reclamo_envio. Un nodo If compara esa palabra y manda el flujo por la rama de reclamos de envío">
       <line class="wire" x1="20" y1="110" x2="570" y2="110"/>
@@ -708,7 +894,7 @@ Devolvé únicamente la categoría, en minúscula, sin explicación ni texto adi
       <rect class="box" x="660" y="152" width="225" height="44" rx="10"/><text class="mono" x="772" y="171" text-anchor="middle">otro</text><text class="sm" x="772" y="188" text-anchor="middle">derivar a una persona</text>
       <g class="st1"><text class="b" x="78" y="58" text-anchor="middle">mensaje</text><text class="mono" x="78" y="172" text-anchor="middle">"...todavía no</text><text class="mono" x="78" y="190" text-anchor="middle">me llegó"</text></g>
       <g class="st2"><text class="b" x="360" y="58" text-anchor="middle">respuesta</text><text class="mono" x="360" y="172" text-anchor="middle">reclamo_envio</text></g>
-      <g class="st3"><text class="sm" x="500" y="172" text-anchor="middle">compara el</text><text class="sm" x="500" y="190" text-anchor="middle">texto exacto</text></g>
+      <g class="st3"><text class="sm" x="500" y="172" text-anchor="middle">compara letra</text><text class="sm" x="500" y="190" text-anchor="middle">por letra</text></g>
       <circle class="tok tok5" cx="648" cy="110" r="10" style="--x0:-600px;--y0:0px;--x1:-600px;--y1:0px;--x2:-288px;--y2:0px;--x3:-148px;--y3:0px"/>
     </svg>
     <p class="cap">La animación se repite sola · Las acciones de cada rama son un ejemplo</p>
@@ -717,22 +903,22 @@ Devolvé únicamente la categoría, en minúscula, sin explicación ni texto adi
     <div class="card ok"><span class="tag ok">el If lo reconoce</span><p class="small"><code>reclamo_envio</code></p></div>
     <div class="card bad"><span class="tag bad">el If no lo reconoce</span><p class="small"><code>Reclamo de envío.</code> &nbsp; <code>Creo que es un reclamo</code></p></div>
   </div>
-  <p class="note">Un nodo de reglas compara <b>texto exacto</b>. Si la IA agrega una mayúscula, un punto o una explicación, la regla no coincide y el flujo toma el camino equivocado.</p>
+  <p class="note">Esa regla compara <b>letra por letra</b>. Si la IA agrega una mayúscula, un punto o una explicación, ya no coincide y el flujo toma el camino equivocado.</p>
 </section>
 
-<!-- 19 · Zero-shot y few-shot -->
+<!-- 24 · Zero-shot y few-shot -->
 <section class="slide">
-  <h2>Zero-shot y few-shot</h2>
+  <h2>Con ejemplos o sin ejemplos</h2>
   <div class="grid">
     <div class="card">
       <span class="tag">sin ejemplos</span>
       <h3>🏊 Zero-shot</h3>
-      <p class="small">"Tirarse a la pileta sin saber si hay agua": pedimos la tarea <b>sin darle ningún ejemplo</b> y confiamos en su conocimiento general. Sirve para tareas muy genéricas, pero el resultado puede salir impredecible o con un formato que no nos sirve.</p>
+      <p class="small">Es decirle a alguien nuevo "contestá las reseñas" y nada más. "Tirarse a la pileta sin saber si hay agua": lo va a hacer, pero <b>a su manera</b>. Sirve para tareas simples; el resultado puede salir impredecible.</p>
     </div>
     <div class="card ok">
       <span class="tag ok">con ejemplos</span>
       <h3>🎯 Few-shot</h3>
-      <p class="small">Le enseñamos con <b>dos o tres ejemplos</b> dentro del mismo prompt (los famosos <i>shots</i>). "Copia" el tono y la estructura, sin que le expliquemos las reglas en un párrafo gigante.</p>
+      <p class="small">Es mostrarle <b>dos o tres reseñas ya contestadas</b> y decirle "hacelo así". Esos ejemplos son los famosos <i>shots</i>. Copia el tono y el largo sin que le expliques las reglas.</p>
     </div>
   </div>
 <pre class="wrap">Respondé la reseña del cliente con el mismo tono de los ejemplos.
@@ -745,28 +931,39 @@ Respuesta: <span class="f">¡Uy, qué macana! Escribinos y te lo cambiamos sin c
 
 Reseña: <span class="s">"Muy linda la tela del buzo"</span>
 Respuesta:</pre>
-  <p class="note">Con dos ejemplos ya entiende el tono (amable, con signos de exclamación) y el largo. El prompt del buzo era <b>zero-shot</b>; si un resultado sale inconsistente, <b>sumá ejemplos</b>.</p>
+  <p class="note">Con dos ejemplos ya entiende el tono (amable, con signos de exclamación) y el largo. El prompt del buzo era <b>zero-shot</b>; si un resultado sale distinto cada vez, <b>sumá ejemplos</b>.</p>
 </section>
 
-<!-- 20 · Tradicional vs con IA -->
+<!-- 25 · Regla fija vs IA -->
 <section class="slide">
   <span class="tag" style="align-self:flex-start">Automatizaciones</span>
-  <h2>Automatización tradicional vs. con IA</h2>
-  <p>Una <b>automatización</b> es un flujo que se ejecuta solo cada vez que pasa algo, por ejemplo cuando llega un mensaje. Y <b>no siempre necesita IA</b>.</p>
-  <table class="plain">
-    <tr><th></th><th>Tradicional (reglas fijas)</th><th>Con IA</th></tr>
-    <tr><td>Cómo decide</td><td>Con una regla escrita de antemano: si el mensaje contiene la palabra "envío" → <code>reclamo_envio</code>.</td><td>Con un prompt como el que armamos: el modelo lee el mensaje y elige la categoría.</td></tr>
-    <tr><td>Con "compré un buzo la semana pasada y todavía no me llegó"</td><td><span class="c-bad">Falla:</span> el mensaje no contiene la palabra "envío".</td><td><span class="c-ok">Acierta:</span> lo clasifica como <code>reclamo_envio</code>, porque interpreta el sentido.</td></tr>
-    <tr><td>Cuándo conviene</td><td>Cuando los datos son predecibles y la regla siempre se cumple.</td><td>Cuando el texto lo escriben personas y cada una lo dice distinto.</td></tr>
-  </table>
-  <div class="grid">
-    <div class="card"><h3>📐 Regla fija</h3><p class="small">Más <b>barata</b> y <b>predecible</b>.</p></div>
-    <div class="card"><h3>🧠 IA</h3><p class="small">Más <b>flexible</b> con el lenguaje humano.</p></div>
+  <h2>Automatizar no siempre es usar IA</h2>
+  <p><b>Automatizar</b> es lograr que un proceso se ejecute solo. Que necesite IA o no depende de <b>cómo llega la información</b>.</p>
+  <div class="card" style="padding:1vh 1vw">
+    <svg class="viz anim" viewBox="0 0 900 215" role="img" aria-label="Animación: dos casos. En el primero, el cliente completa un formulario y elige de una lista la opción Reclamo de envío; una regla fija compara esa opción y avisa a logística, sin IA. En el segundo, el cliente escribe un mensaje libre que dice todavía no me llegó; una IA con un prompt interpreta el sentido y lo clasifica como reclamo_envio">
+      <line class="wire" x1="270" y1="50" x2="340" y2="50"/><line class="wire" x1="560" y1="50" x2="640" y2="50"/>
+      <line class="wire" x1="270" y1="165" x2="340" y2="165"/><line class="wire" x1="560" y1="165" x2="640" y2="165"/>
+      <rect class="box" x="20" y="12" width="250" height="76" rx="12"/><text class="sm" x="34" y="34">Formulario de contacto</text>
+      <rect class="cell" x="34" y="44" width="222" height="32" rx="6"/><text class="mono" x="44" y="65">Motivo: Reclamo de envío</text><text class="b" x="240" y="65" text-anchor="middle">▾</text>
+      <rect class="box" x="340" y="22" width="220" height="56" rx="12"/><text class="b" x="450" y="46" text-anchor="middle">Regla fija</text><text class="sm" x="450" y="66" text-anchor="middle">si Motivo = "Reclamo de envío"</text>
+      <rect class="box" x="20" y="127" width="250" height="76" rx="12"/><text class="sm" x="34" y="149">Mensaje escrito por el cliente</text>
+      <text class="mono" x="34" y="172">"...la semana pasada y</text><text class="mono" x="34" y="191">todavía no me llegó"</text>
+      <rect class="box m" x="340" y="137" width="220" height="56" rx="12"/><text class="b" x="450" y="161" text-anchor="middle">IA con un prompt</text><text class="sm" x="450" y="181" text-anchor="middle">interpreta el sentido</text>
+      <g class="q1"><rect class="win" x="336" y="18" width="228" height="64" rx="14"/></g>
+      <g class="q2"><rect class="in" x="640" y="26" width="240" height="48" rx="10"/><text class="t-ok" x="760" y="47" text-anchor="middle">✓ avisar a logística</text><text class="sm" x="760" y="65" text-anchor="middle">misma opción, mismo camino</text></g>
+      <g class="q3"><rect class="win" x="336" y="133" width="228" height="64" rx="14"/></g>
+      <g class="q4"><rect class="in" x="640" y="141" width="240" height="48" rx="10"/><text class="t-ok" x="760" y="162" text-anchor="middle">✓ reclamo_envio</text><text class="sm" x="760" y="180" text-anchor="middle">y de ahí, a logística</text></g>
+    </svg>
+    <p class="cap">La animación se repite sola · Arriba, un dato que llega siempre igual; abajo, un texto que hay que interpretar</p>
   </div>
-  <p class="note">No confundir "automatización" con "Inteligencia Artificial": automatizar es que la tarea se ejecute sola. Qué es una automatización y cómo se arma lo vemos en detalle en el <b>Módulo 2</b>.</p>
+  <div class="grid">
+    <div class="card"><h3>📐 Regla fija, sin IA</h3><p class="small">El dato llega <b>siempre igual</b>: una opción de una lista, una casilla marcada, un monto. Más <b>barata</b> y <b>predecible</b>.</p></div>
+    <div class="card"><h3>🧠 Con IA</h3><p class="small">Llega <b>texto libre</b>, y cada persona lo dice a su manera. Más <b>flexible</b>.</p></div>
+  </div>
+  <p class="note"><b>¿Y si a la regla fija le llega el mensaje libre?</b> Busca la palabra "envío", no la encuentra, y el reclamo se pierde. Ahí hace falta IA.</p>
 </section>
 
-<!-- 21 · Probalo vos -->
+<!-- 26 · Probalo vos -->
 <section class="slide">
   <span class="tag" style="align-self:flex-start">Práctica · no se entrega</span>
   <h2>Probalo vos: de la idea al prompt</h2>
@@ -784,10 +981,10 @@ Respuesta:</pre>
     <tr><td>4 · Delimitadores</td><td>Separá tus instrucciones del mail que llega.</td></tr>
     <tr><td>5 · Formato</td><td>Una respuesta que el paso siguiente pueda usar <b>sin limpiarla</b>.</td></tr>
   </table>
-  <p class="note">Escribilo en un chat con cualquier modelo y probalo con tres mails distintos. Si las tres respuestas no tienen el mismo formato, falta algo.</p>
+  <p class="note">Escribilo en un chat con cualquier IA y probalo con tres mails distintos. Si las tres respuestas no tienen el mismo formato, falta algo.</p>
 </section>
 
-<!-- 22 · Solución posible -->
+<!-- 27 · Solución posible -->
 <section class="slide">
   <h2>Una solución posible</h2>
   <div class="grid" style="grid-template-columns:1.7fr 1fr;align-items:stretch">
@@ -818,7 +1015,7 @@ Devolvé únicamente la categoría, en minúscula y sin tildes, sin explicacione
   <p class="note">No es la única respuesta correcta. Lo que importa es que estén los cuatro componentes y los delimitadores.</p>
 </section>
 
-<!-- 23 · Repaso 1 -->
+<!-- 28 · Repaso 1 -->
 <section class="slide">
   <span class="tag" style="align-self:flex-start">Repaso · tarjetas 1 a 3</span>
   <h2>Repaso: pensá la respuesta antes de abrirla</h2>
@@ -837,7 +1034,7 @@ Devolvé únicamente la categoría, en minúscula y sin tildes, sin explicacione
   <p class="cap">Hacé clic en cada tarjeta para ver la respuesta</p>
 </section>
 
-<!-- 24 · Repaso 2 -->
+<!-- 29 · Repaso 2 -->
 <section class="slide">
   <span class="tag" style="align-self:flex-start">Repaso · tarjetas 4 y 5</span>
   <h2>Repaso: las dos últimas</h2>
@@ -853,37 +1050,53 @@ Devolvé únicamente la categoría, en minúscula y sin tildes, sin explicacione
   <p class="note"><b>Si fallaste alguna:</b> volvé a leer ese concepto en el material del curso. No se trata de memorizar, sino de entender el <i>porqué</i>.</p>
 </section>
 
-<!-- 25 · Resumen -->
+<!-- 30 · Diccionario -->
+<section class="slide">
+  <h2>El diccionario de la clase</h2>
+  <table class="plain">
+    <tr><th>Palabra</th><th>En criollo</th></tr>
+    <tr><td>LLM</td><td>Un programa que aprendió a leer y escribir procesando muchísimo texto. <b>Predice lo que sigue.</b></td></tr>
+    <tr><td>IA generativa</td><td>La IA que <b>crea contenido nuevo</b>: texto, imágenes, audio o código.</td></tr>
+    <tr><td>Token</td><td>Cada <b>pedacito de texto</b> con el que trabaja el modelo: una palabra, una sílaba o una letra.</td></tr>
+    <tr><td>Inferencia</td><td>El momento en que el modelo, ya entrenado, <b>genera la respuesta</b>.</td></tr>
+    <tr><td>Ventana de contexto</td><td>La "hoja" de tamaño fijo: el <b>máximo de tokens</b> que puede tener presentes a la vez.</td></tr>
+    <tr><td>Alucinación</td><td>Una respuesta <b>inventada</b> que suena segura.</td></tr>
+    <tr><td>Prompt</td><td>El <b>pedido</b> que le hacemos a la IA.</td></tr>
+    <tr><td>Delimitador</td><td>La marca que separa <b>tu orden</b> del <b>texto a procesar</b>.</td></tr>
+  </table>
+</section>
+
+<!-- 31 · Resumen -->
 <section class="slide">
   <h2>Resumen de la clase</h2>
   <ul>
-    <li>La <b>IA</b> es una rama de la informática. Un <b>LLM</b> nace de combinar Deep Learning y NLP con enormes cantidades de texto.</li>
-    <li>Un LLM <b>predice lo que sigue</b> según probabilidades: no "entiende" como una persona.</li>
-    <li>No lee palabras, lee <b>tokens</b>. Y tiene un límite fijo: la <b>ventana de contexto</b>.</li>
-    <li>Cuando le falta información, puede <b>alucinar</b>: inventa una respuesta plausible y la da con total seguridad.</li>
-    <li>Un prompt efectivo tiene <b>rol, tarea, contexto y formato de salida</b>.</li>
-    <li>Los <b>delimitadores</b> separan tus instrucciones del dato que escribió otra persona.</li>
-    <li><b>Zero-shot</b>: sin ejemplos. <b>Few-shot</b>: con dos o tres ejemplos que marcan tono y formato.</li>
-    <li>Automatizar no es lo mismo que usar IA: la <b>regla fija</b> es barata y predecible; la <b>IA</b> es flexible con el lenguaje humano.</li>
+    <li>La <b>IA</b> es una rama de la informática. Un <b>LLM</b> es un programa que aprendió a escribir procesando muchísimo texto.</li>
+    <li>Aprendió jugando a <b>adivinar la palabra que sigue</b>. Y eso mismo hace cuando lo usás, de a un pedacito por vez.</li>
+    <li>No lee palabras: lee <b>tokens</b>, que por dentro son números.</li>
+    <li>Elige con <b>una pizca de azar</b>: por eso la misma pregunta puede dar respuestas distintas.</li>
+    <li>Trabaja sobre una hoja de tamaño fijo, la <b>ventana de contexto</b>. Si le falta un dato, puede <b>alucinar</b>.</li>
+    <li>Un buen prompt tiene <b>rol, tarea, contexto y formato de salida</b>, y separa el dato con <b>delimitadores</b>.</li>
+    <li><b>Zero-shot</b>: sin ejemplos. <b>Few-shot</b>: con dos o tres ejemplos que marcan el tono y el formato.</li>
+    <li>Automatizar no siempre es usar IA: la <b>regla fija</b> es barata y predecible; la <b>IA</b> es flexible con el lenguaje humano.</li>
   </ul>
   <p class="sub">¿Preguntas?</p>
 </section>
 
-<!-- 26 · Lo que viene -->
+<!-- 32 · Lo que viene -->
 <section class="slide">
   <span class="tag" style="align-self:flex-start">Lo que viene</span>
   <h2>Módulo 2 y la Preentrega 1</h2>
   <p>La primera pre-entrega se entrega en el <b>Módulo 2</b>: <b>"Diseño de una Solución con IA en n8n"</b>. Vas a hacer lo mismo que hoy, pero con un proceso de <b>tu trabajo o tu vida diaria</b>.</p>
   <table class="plain">
     <tr><th>Sección del PDF</th><th>Qué va</th><th>Dónde se ve</th></tr>
-    <tr><td>1 · Identificación y ROI</td><td>Un proceso manual y repetitivo, y por qué conviene automatizarlo: tiempo que ahorrarías por semana.</td><td>Módulo 2</td></tr>
-    <tr><td>2 · Diseño del workflow</td><td>El disparador (trigger), qué datos se procesan y cuál es el resultado final.</td><td>Módulo 2</td></tr>
+    <tr><td>1 · Identificación y ROI</td><td>Un proceso manual y repetitivo, y por qué conviene automatizarlo: cuánto tiempo ahorrarías por semana.</td><td>Módulo 2</td></tr>
+    <tr><td>2 · Diseño del workflow</td><td>Qué lo dispara, qué datos se procesan y cuál es el resultado final.</td><td>Módulo 2</td></tr>
     <tr><td>3 · Ingeniería del prompt</td><td>El prompt exacto del paso de IA, con rol, tarea y formato de salida.</td><td><span class="c-ok">Hoy</span></td></tr>
     <tr><td>4 · Gestión de errores</td><td>Un riesgo (por ejemplo, alucinaciones o datos incompletos) y cómo ajustarías el flujo o el prompt.</td><td><span class="c-ok">Hoy</span></td></tr>
   </table>
   <div class="grid">
-    <div class="card ok"><span class="tag ok">para ir adelantando</span><p class="small">Elegí un proceso repetitivo tuyo y escribí el <b>prompt</b> que lo resolvería, como en la práctica de la inmobiliaria.</p></div>
-    <div class="card"><h3>📦 Formato de entrega</h3><p class="small">Un <b>único PDF</b> con las cuatro secciones tituladas. No hace falta que el flujo esté construido en n8n: alcanza con el diseño lógico y el prompt.</p></div>
+    <div class="card ok"><span class="tag ok">para ir adelantando</span><p class="small">Elegí una tarea repetitiva tuya y escribí el <b>prompt</b> que la resolvería, como en la práctica de la inmobiliaria.</p></div>
+    <div class="card"><h3>📦 Formato de entrega</h3><p class="small">Un <b>único PDF</b> con las cuatro secciones tituladas. No hace falta construir nada en n8n: alcanza con el diseño y el prompt.</p></div>
   </div>
   <p class="note">El <b>ROI</b> y el <b>boceto del flujo en n8n</b> no están en este módulo: se explican en el Módulo 2.</p>
 </section>
@@ -911,14 +1124,14 @@ Devolvé únicamente la categoría, en minúscula y sin tildes, sin explicacione
     while (overflows() && z > 0.4) { z = Math.round((z - 0.03) * 100) / 100; apply(); }
   }
   const sections = [
-    {name:'IA y LLM',     from:2,  to:7},
-    {name:'Tokens',       from:8,  to:10},
-    {name:'Contexto',     from:11, to:12},
-    {name:'Prompts',      from:13, to:15},
-    {name:'Mal y bien',   from:16, to:19},
-    {name:'Con o sin IA', from:20, to:20},
-    {name:'Práctica',     from:21, to:22},
-    {name:'Repaso',       from:23, to:26}
+    {name:'Qué es la IA',  from:2,  to:5},
+    {name:'Cómo funciona', from:6,  to:9},
+    {name:'Por dentro',    from:10, to:14},
+    {name:'Límites',       from:15, to:17},
+    {name:'Prompts',       from:18, to:20},
+    {name:'Mal y bien',    from:21, to:24},
+    {name:'Automatizar',   from:25, to:27},
+    {name:'Repaso',        from:28, to:32}
   ];
   let i = 0;
   const bar = document.getElementById('bar'), count = document.getElementById('count');

@@ -1,0 +1,984 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clase 1: Introducción a la IA y al Prompt Engineering · AI Automation</title>
+<link rel="icon" type="image/png" href="https://framerusercontent.com/images/BYaKbm7V4jKpNmcij4dQFyirq5U.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --orange:#ff6329; --orange-d:#e24d14; --cream:#fdfbf6; --ink:#1e0b08; --muted:#6f5f58;
+    --card:#ffffff; --code-bg:#1e0b08; --th-bg:#1e0b08; --btn-dark:#1e0b08; --btn-hover:#3a1b14; --pillbg:#1e0b08; --node-line:#1e0b08; --hover:#f6efe6; --body:#3a2a25; --glow2:#fff1e8; --okbg:#dcf5e6; --badbg:#fde1e1; --line:#eadfd3; --peach:#ffe9de; --ok:#1f9d55; --bad:#d93f3f; --warn:#f5a623;
+  }
+  @media screen{
+  :root[data-theme="dark"]{
+    --cream:#150b08; --ink:#f7ede4; --muted:#b9a89f; --card:#241410; --line:#3a2620; --peach:#3a1e14;
+    --orange-d:#ff9a6b; --ok:#4cd98a; --bad:#ff7a7a; --warn:#f5a623;
+    --code-bg:#0d0605; --th-bg:#3a1e14; --btn-dark:#3a2620; --btn-hover:#523228; --pillbg:#0d0605;
+    --node-line:#6b4a3e; --hover:#2a1913; --body:#e6d8cf; --glow2:#2a150d;
+    --okbg:rgba(76,217,138,.16); --badbg:rgba(255,122,122,.16);
+  }
+}
+html,body{transition:background .3s,color .3s}
+*{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--cream);color:var(--ink);overflow:hidden;
+    font-family:"Plus Jakarta Sans","Poppins","Segoe UI",system-ui,-apple-system,sans-serif}
+  body{display:flex;flex-direction:column}
+
+  .announce{background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;
+    gap:1.2vw;padding:1.1vh 2vw;font-size:clamp(.72rem,1.2vw,1rem);flex-wrap:wrap;text-align:center}
+  .announce .pill-dark{background:var(--pillbg);padding:.35em 1em;border-radius:99px;font-weight:700;color:#fff}
+  .announce .sep{width:1px;height:1.2em;background:rgba(255,255,255,.7)}
+
+  .top{position:relative;display:flex;align-items:center;justify-content:space-between;gap:2vw;
+    padding:1.5vh 3vw;background:var(--cream);border-bottom:1px solid var(--line)}
+  .logo{display:flex;align-items:center;min-width:8rem}
+  .logo img{height:2.2rem;display:block}
+  .wordmark{font-weight:800;font-size:1.7rem;letter-spacing:-.05em;text-transform:uppercase;color:var(--ink)}
+  .wordmark i{font-style:normal;color:var(--orange);margin:0 .04em}
+  nav{display:flex;gap:.3vw;flex-wrap:wrap;justify-content:center}
+  nav button{background:none;border:0;font:inherit;font-weight:500;font-size:clamp(.78rem,1.15vw,1rem);
+    padding:.6em 1em;border-radius:99px;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:.45em;
+    transition:background .2s}
+  nav button::after{content:"";width:12px;height:12px;background:no-repeat center/contain
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236f5f58' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")}
+  nav button:hover{background:var(--hover)}
+  nav button.active{background:var(--peach);color:var(--orange-d);font-weight:700}
+  .actions{display:flex;align-items:center;gap:.7vw}
+  .theme svg{width:1.25rem;height:1.25rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .theme .sun{display:none}
+  :root[data-theme="dark"] .theme .sun{display:block}
+  :root[data-theme="dark"] .theme .moon{display:none}
+  .btn-orange{background:var(--orange);color:#fff;border:0;border-radius:99px;padding:.8em 1.7em;
+    font:inherit;font-weight:700;font-size:clamp(.8rem,1.1vw,1rem);cursor:pointer;transition:background .2s}
+  .btn-orange:hover{background:var(--orange-d)}
+  .round{width:2.9rem;height:2.9rem;border-radius:50%;border:0;background:var(--btn-dark);color:#fff;cursor:pointer;
+    font:inherit;font-size:1.1rem;display:flex;align-items:center;justify-content:center}
+  .round:hover{background:var(--btn-hover)}
+  .counter{background:var(--btn-dark);color:#fff;border-radius:99px;padding:0 1.1em;height:2.9rem;
+    display:flex;align-items:center;font-weight:600;font-size:.9rem;white-space:nowrap}
+  .bar{position:absolute;left:0;bottom:-1px;height:4px;background:var(--orange);width:0;transition:width .3s}
+
+  .deck{position:relative;flex:1;min-height:0;
+    background:radial-gradient(circle at 94% 8%,var(--peach) 0,transparent 30%),
+               radial-gradient(circle at 4% 98%,var(--glow2) 0,transparent 26%),var(--cream)}
+  .slide{position:absolute;inset:0;padding:3.5vh 7vw 4vh;display:none;flex-direction:column;
+    justify-content:center;gap:2vh;animation:fade .35s ease;overflow:auto}
+  .slide.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  h1{font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.05;font-weight:800;letter-spacing:-.04em}
+  h1 .hl{color:var(--orange)}
+  h2{font-size:clamp(1.6rem,3.3vw,2.6rem);font-weight:800;letter-spacing:-.03em;line-height:1.1}
+  h2::after{content:"";display:block;width:3.4rem;height:.32rem;border-radius:99px;background:var(--orange);margin-top:.45em}
+  h3{font-size:clamp(1.05rem,1.8vw,1.45rem);font-weight:700;margin-bottom:.35em;display:flex;align-items:center;gap:.5em}
+  h3::before{content:"";width:.7em;height:.7em;border-radius:50%;background:var(--orange);flex:none}
+  p,li{font-size:clamp(1rem,1.8vw,1.4rem);line-height:1.55;color:var(--body)}
+  b{color:var(--ink)}
+  .sub{color:var(--muted);font-size:clamp(1.05rem,2.1vw,1.6rem)}
+  ul{list-style:none;display:flex;flex-direction:column;gap:1vh}
+  li{padding-left:1.7em;position:relative}
+  li::before{content:"";position:absolute;left:0;top:.45em;width:.9em;height:.9em;border-radius:50%;
+    background:var(--peach);border:2px solid var(--orange)}
+  code{font-family:"JetBrains Mono","Cascadia Code",Consolas,monospace;background:var(--peach);color:var(--orange-d);
+    padding:.08em .45em;border-radius:7px;font-size:.88em;font-weight:500}
+
+  pre{background:var(--code-bg);border-radius:18px;padding:2vh 1.8vw;overflow:auto;
+    font-family:"JetBrains Mono","Cascadia Code",Consolas,monospace;font-size:clamp(.75rem,1.4vw,1.1rem);
+    line-height:1.6;color:#f6ebe2;box-shadow:0 10px 30px rgba(30,11,8,.18)}
+  pre .k{color:#ff8a5c} pre .c{color:#9a8880} pre .s{color:#9be3a5} pre .f{color:#ffc46b} pre .w{color:#ffd98a}
+
+  .grid{display:grid;gap:2vw;grid-template-columns:1fr 1fr;align-items:start}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2.2vh 1.7vw;
+    box-shadow:0 8px 24px rgba(30,11,8,.06)}
+  .card pre{box-shadow:none;margin-top:.6vh}
+  .card.ok{border-top:5px solid var(--ok)} .card.bad{border-top:5px solid var(--bad)}
+  .tag{display:inline-flex;align-items:center;gap:.4em;font-size:.82rem;font-weight:700;padding:.3em 1em;
+    border-radius:99px;margin-bottom:.7em;background:var(--peach);color:var(--orange-d)}
+  .tag.ok{background:var(--okbg);color:var(--ok)} .tag.ok::before{content:"✓";font-weight:800}
+  .tag.bad{background:var(--badbg);color:var(--bad)} .tag.bad::before{content:"✕";font-weight:800}
+
+  table{border-collapse:separate;border-spacing:0;width:100%;background:var(--card);border:1px solid var(--line);
+    border-radius:16px;overflow:hidden;font-size:clamp(.85rem,1.5vw,1.18rem)}
+  th{background:var(--th-bg);color:#fff;text-align:left;padding:1.1vh 1.2vw;font-weight:700}
+  td{padding:1vh 1.2vw;border-bottom:1px solid var(--line)}
+  tr:last-child td{border-bottom:0}
+  td:first-child{font-family:"JetBrains Mono","Cascadia Code",Consolas,monospace;color:var(--orange-d);font-weight:500}
+
+  .flow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.8vw}
+  .node{background:var(--card);border:2px solid var(--node-line);border-radius:14px;padding:1.2vh 1.2vw;text-align:center;
+    font-weight:600;font-size:clamp(.8rem,1.45vw,1.15rem)}
+  .node small{display:block;color:var(--muted);font-weight:400;font-size:.75em;margin-top:.3em;
+    font-family:"JetBrains Mono",Consolas,monospace}
+  .node.m{border-color:var(--orange);background:var(--peach)}
+  .node.o{background:var(--orange);border-color:var(--orange);color:#fff}
+  .node.o small{color:rgba(255,255,255,.85)}
+  .arrow{color:var(--orange);font-size:1.8rem;font-weight:800}
+
+  .note{background:var(--peach);border-left:6px solid var(--orange);padding:1.3vh 1.5vw;border-radius:12px;
+    font-size:clamp(.92rem,1.6vw,1.25rem)}
+  .big{font-size:clamp(1.3rem,2.6vw,2rem);text-align:center;font-weight:600;line-height:1.35}
+  .center{text-align:center;align-items:center}
+  .center .tag{margin-bottom:0}
+
+  @media (max-width:900px){nav{display:none}.grid{grid-template-columns:1fr}.slide{justify-content:flex-start}}
+  @media print{
+    html,body{overflow:visible;height:auto}
+    body{display:block}
+    .announce,.top{display:none}
+    .deck{position:static;background:#fff}
+    .slide{position:static;display:flex!important;page-break-after:always;height:100vh;animation:none}
+  }
+
+  /* ===== Ajustes de layout: header compacto, sin scroll en código ===== */
+  .announce{padding:.55vh 2vw;font-size:clamp(.68rem,1vw,.9rem);gap:1vw}
+  .announce .pill-dark{padding:.2em .8em}
+  .top{padding:1vh 2.5vw;gap:1.2vw}
+  .logo{min-width:0}
+  .logo img{height:1.8rem}
+  .wordmark{font-size:1.4rem}
+  nav{flex:1;min-width:0;flex-wrap:nowrap;gap:.1vw}
+  nav button{white-space:nowrap;font-size:clamp(.7rem,.95vw,.9rem);padding:.45em .7em}
+  nav button::after{display:none}
+  .actions{gap:.5vw;flex:none}
+  .btn-orange{white-space:nowrap;padding:.6em 1.2em;font-size:clamp(.78rem,1vw,.95rem)}
+  .round{width:2.4rem;height:2.4rem}
+  .counter{height:2.4rem;white-space:nowrap;padding:0 .9em;font-size:.85rem}
+
+  .slide{padding:2.2vh 6vw 2.8vh;gap:1.5vh;overflow:hidden}
+  .fit{display:flex;flex-direction:column;gap:inherit;align-items:inherit;justify-content:center;transform-origin:top left}
+  p,li{line-height:1.45}
+  pre{overflow:hidden;padding:1.5vh 1.5vw;font-size:clamp(.7rem,1.2vw,1rem);line-height:1.5}
+  .card{padding:1.8vh 1.4vw}
+
+  @media (max-width:1100px){nav{display:none}}
+  @media print{.fit{zoom:1!important;width:100%!important}}
+
+  /* ===== Diapositiva con código largo: scroll interno en vez de achicar ===== */
+  .slide.scroll .fit{height:100%;justify-content:flex-start}
+  .slide.scroll .grid{flex:1;min-height:0}
+  .slide.scroll .card{display:flex;flex-direction:column;min-height:0}
+  .slide.scroll .card pre{flex:1;min-height:0;overflow:auto;font-size:clamp(.78rem,1.15vw,1rem)}
+  @media print{.slide.scroll .card pre{overflow:visible}}
+
+  /* ===== Gráficos SVG (mapa de significados, flechas del coseno) ===== */
+  .viz{display:block;width:100%;height:auto;max-height:36vh}
+  .viz text{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:15px;fill:var(--ink)}
+  .viz .grp{font-weight:700;fill:var(--muted);font-size:14px;letter-spacing:.04em}
+  .viz .cl{fill:var(--peach);stroke:var(--orange);stroke-width:1.5;stroke-dasharray:5 5;opacity:.7}
+  .viz .pt{fill:var(--orange)}
+  .viz .org{fill:var(--muted)}
+  .viz .near{stroke:var(--ok);stroke-width:3}
+  .viz .far{stroke:var(--bad);stroke-width:2.5;stroke-dasharray:7 6}
+  .viz .t-ok{fill:var(--ok);font-weight:700}
+  .viz .t-bad{fill:var(--bad);font-weight:700}
+  .viz .vec{stroke:var(--ink);stroke-width:3;fill:none}
+  .viz .vec.c{stroke:var(--orange)}
+  .viz .ah{fill:var(--ink)}
+  .viz .ah.c{fill:var(--orange)}
+  .viz .arc-ok{stroke:var(--ok);stroke-width:4;fill:none}
+  .viz .arc-bad{stroke:var(--bad);stroke-width:4;fill:none}
+  .viz .lbl{font-weight:800;font-size:20px}
+  .cap{font-size:clamp(.72rem,1.05vw,.88rem)!important;color:var(--muted);text-align:center;margin-top:.4vh}
+  .c-ok{color:var(--ok);font-weight:700} .c-bad{color:var(--bad);font-weight:700}
+  /* Tablas cuya primera columna es texto común (no código) */
+  table.plain td:first-child{font-family:inherit;color:var(--ink);font-weight:700}
+  .small, .small li{font-size:clamp(.85rem,1.4vw,1.1rem)}
+  /* Código largo: que se desplace dentro de la tarjeta en vez de empujarla */
+  .slide.scroll .fit{width:100%}
+  .slide.scroll .grid, .slide.scroll .card, .slide.scroll .card pre{min-width:0;max-width:100%}
+  /* ===== Botón para volver al índice ===== */
+  a.round{text-decoration:none}
+  .home svg{width:1.2rem;height:1.2rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .logo a{display:flex;align-items:center;text-decoration:none}
+
+  /* ===== Animaciones SVG ===== */
+  .viz{display:block;width:100%;height:auto;max-height:36vh}
+  .viz text{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:15px;fill:var(--ink)}
+  .viz .grp{font-weight:700;fill:var(--muted);font-size:14px;letter-spacing:.04em}
+  .viz .t-ok{fill:var(--ok);font-weight:700} .viz .t-bad{fill:var(--bad);font-weight:700}
+  .viz .ah.c{fill:var(--orange)}
+  .cap{font-size:clamp(.72rem,1.05vw,.88rem)!important;color:var(--muted);text-align:center;margin-top:.4vh}
+  .viz.anim{max-height:40vh}
+  .anim .box{fill:var(--card);stroke:var(--node-line);stroke-width:2}
+  .anim .box.m{fill:var(--peach);stroke:var(--orange)}
+  .anim .box.o{fill:var(--orange);stroke:var(--orange)}
+  .anim text.wt{fill:#fff;font-weight:700}
+  .anim text.b{font-weight:700}
+  .anim .arr{stroke:var(--orange);stroke-width:3;fill:none}
+  .anim .wire{stroke:var(--line);stroke-width:3;fill:none}
+  .anim .sm{font-size:13px;fill:var(--muted)}
+  .anim .mono{font-family:"JetBrains Mono",Consolas,monospace;font-size:13px}
+  .anim .tok{fill:var(--orange);stroke:var(--ink);stroke-width:3}
+  .anim .ghost{fill:none;stroke:var(--line);stroke-width:2;stroke-dasharray:5 4}
+  .anim .fbar{fill:var(--peach);stroke:var(--orange);stroke-width:1.5}
+  .anim .grow{transform-box:fill-box;transform-origin:left center}
+  .anim .cell{fill:var(--card);stroke:var(--line)}
+  .anim .win{fill:none;stroke:var(--orange);stroke-width:3}
+  .anim .band{fill:none;stroke:var(--ok);stroke-width:3;stroke-dasharray:7 5}
+  .anim .ph{stroke:var(--ink);stroke-width:2;stroke-dasharray:4 4}
+  .anim .w1,.anim .w2,.anim .p1,.anim .p2{opacity:0}
+  .anim .st1,.anim .st2,.anim .st3,.anim .st4,.anim .tok5,.anim .tok7,.anim .ret,.anim .w1,.anim .w2,.anim .w3,.anim .p1,.anim .p2{
+    animation-duration:12s;animation-iteration-count:infinite;animation-timing-function:ease-in-out}
+  .anim .g1,.anim .g2,.anim .g3,.anim .ph,.anim .ap40,.anim .ap60{animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+  .anim .st1{animation-name:kst1} .anim .st2{animation-name:kst2} .anim .st3{animation-name:kst3} .anim .st4{animation-name:kst4}
+  .anim .tok5{animation-name:ktok5} .anim .tok7{animation-name:ktok7} .anim .ret{animation-name:kret}
+  .anim .w1{animation-name:kw1} .anim .w2{animation-name:kw2} .anim .w3{animation-name:kw3} .anim .p1{animation-name:kp1} .anim .p2{animation-name:kp2}
+  .anim .g1{animation-name:kg1} .anim .g2{animation-name:kg2} .anim .g3{animation-name:kg3} .anim .ph{animation-name:kph}
+  .anim .ap40{animation-name:kap40} .anim .ap60{animation-name:kap60}
+  @keyframes kst1{0%{opacity:0}6%,94%{opacity:1}100%{opacity:0}}
+  @keyframes kst2{0%,22%{opacity:0}28%,94%{opacity:1}100%{opacity:0}}
+  @keyframes kst3{0%,42%{opacity:0}48%,94%{opacity:1}100%{opacity:0}}
+  @keyframes kst4{0%,64%{opacity:0}70%,94%{opacity:1}100%{opacity:0}}
+  @keyframes ktok5{0%,4%{transform:translate(var(--x0),var(--y0))}10%,22%{transform:translate(var(--x1),var(--y1))}30%,42%{transform:translate(var(--x2),var(--y2))}50%,62%{transform:translate(var(--x3),var(--y3))}72%,100%{transform:translate(0,0)}}
+  @keyframes ktok7{0%,3%{transform:translate(var(--x0),var(--y0))}8%,16%{transform:translate(var(--x1),var(--y1))}24%,32%{transform:translate(var(--x2),var(--y2))}40%,48%{transform:translate(var(--x1),var(--y1))}56%,64%{transform:translate(var(--x3),var(--y3))}72%,80%{transform:translate(var(--x1),var(--y1))}88%,100%{transform:translate(0,0)}}
+  @keyframes kret{0%,22%{opacity:0;transform:translate(var(--dx),0)}24%{opacity:1;transform:translate(var(--dx),0)}32%,100%{opacity:1;transform:translate(0,0)}}
+  @keyframes kw1{0%,9%{opacity:0}11%,38%{opacity:1}40%,100%{opacity:0}}
+  @keyframes kw2{0%,41%{opacity:0}43%,70%{opacity:1}72%,100%{opacity:0}}
+  @keyframes kw3{0%,73%{opacity:0}75%,100%{opacity:1}}
+  @keyframes kp1{0%,25%{opacity:0}27%,48%{opacity:1}50%,100%{opacity:0}}
+  @keyframes kp2{0%,49%{opacity:0}51%,70%{opacity:1}72%,100%{opacity:0}}
+  @keyframes kg1{0%{transform:scaleX(0)}20%,100%{transform:scaleX(1)}}
+  @keyframes kg2{0%,20%{transform:scaleX(0)}40%,100%{transform:scaleX(1)}}
+  @keyframes kg3{0%,40%{transform:scaleX(0)}60%,100%{transform:scaleX(1)}}
+  @keyframes kph{0%{transform:translate(-600px,0)}60%,100%{transform:translate(0,0)}}
+  @keyframes kap40{0%,39%{opacity:0}42%,100%{opacity:1}}
+  @keyframes kap60{0%,59%{opacity:0}62%,100%{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.anim *{animation:none!important}}
+  @media print{.anim *{animation:none!important}}
+
+  /* ===== Clase 1 AI Automation: componentes propios ===== */
+  pre.wrap{white-space:pre-wrap;overflow-wrap:anywhere}
+  .card pre + p{margin-top:1vh}
+  .viz .set{fill:var(--card);stroke:var(--node-line);stroke-width:2}
+  .viz .set.m{fill:var(--peach);stroke:var(--orange)}
+  .viz .set.o{fill:var(--orange);stroke:var(--orange)}
+  .viz text.b{font-weight:700}
+  .viz text.wt{fill:#fff;font-weight:700}
+  .anim .out{fill:var(--badbg);stroke:var(--bad);stroke-width:2;stroke-dasharray:5 4}
+  .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:.4em;
+    font-family:"JetBrains Mono","Cascadia Code",Consolas,monospace;font-size:clamp(.95rem,1.9vw,1.5rem);font-weight:500}
+  .chips span{padding:.25em .5em;border-radius:9px;background:var(--card);border:2px solid var(--node-line);white-space:pre;color:var(--ink)}
+  .chips span:nth-child(3n+1){background:var(--peach);border-color:var(--orange)}
+  .chips span:nth-child(3n){background:var(--orange);border-color:var(--orange);color:#fff}
+  /* Tarjetas de repaso (clic para ver la respuesta) */
+  .qa{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 24px rgba(30,11,8,.06);overflow:hidden}
+  .qa .q{width:100%;background:none;border:0;font:inherit;color:var(--ink);text-align:left;cursor:pointer;display:flex;
+    align-items:center;gap:1em;padding:1.7vh 1.4vw;font-weight:700;font-size:clamp(.95rem,1.7vw,1.3rem);line-height:1.3}
+  .qa .q:hover{background:var(--hover)}
+  .qa .q:focus-visible{outline:3px solid var(--orange);outline-offset:-3px}
+  .qa .num{flex:none;width:2.3em;height:2.3em;border-radius:50%;background:var(--peach);color:var(--orange-d);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85em}
+  .qa .ver{margin-left:auto;flex:none;font-size:.68em;font-weight:700;color:#fff;background:var(--orange);
+    border-radius:99px;padding:.45em 1.1em;white-space:nowrap}
+  .qa .ver::after{content:"Ver respuesta"}
+  .qa.open .ver{background:var(--btn-dark)}
+  .qa.open .ver::after{content:"Ocultar"}
+  .qa .a{display:none;padding:0 1.4vw 1.8vh calc(1.4vw + 2.95em);font-size:clamp(.92rem,1.55vw,1.2rem);line-height:1.5;color:var(--body)}
+  .qa.open .a{display:block}
+  @media print{.qa .a{display:block}.qa .ver{display:none}}
+</style>
+<script>try{var q=new URLSearchParams(location.search).get('tema');var t=(q==='dark'||q==='light')?q:localStorage.getItem('curso-theme');if(q==='dark'||q==='light')localStorage.setItem('curso-theme',q);if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+<div class="announce">
+  <span class="pill-dark">CLASE 1 🤖</span>
+  <span>Entendé cómo <b style="color:#fff">piensa una IA</b> y aprendé a darle instrucciones</span>
+  <span class="sep"></span>
+  <span>Módulo 1 de 9</span>
+</div>
+<header class="top">
+  <div class="logo">
+    <a href="index.html" class="to-index" title="Volver al índice">
+    <img id="ulogo" src="logo.png" alt="" onload="document.getElementById('flogo').style.display='none'" onerror="this.style.display='none'">
+    <span id="flogo" class="wordmark">AI<i>|</i>Automation</span>
+    </a>
+  </div>
+  <nav id="nav"></nav>
+  <div class="actions">
+    <a class="round home to-index" href="index.html" title="Volver al índice (I)" aria-label="Volver al índice del curso">
+      <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h5v-6h4v6h5V9.5"/></svg>
+    </a>
+    <button class="round theme" id="theme" title="Cambiar tema (T)" aria-label="Cambiar entre modo claro y oscuro">
+      <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <button class="round" id="prev" title="Anterior">←</button>
+    <button class="btn-orange" id="next">Siguiente →</button>
+    <div class="counter" id="count"></div>
+  </div>
+  <div class="bar" id="bar"></div>
+</header>
+<div class="deck" id="deck">
+
+<!-- 1 · Portada -->
+<section class="slide center">
+  <span class="tag">Clase 1 · AI Automation</span>
+  <h1>Introducción a la IA<br><span class="hl">y al Prompt Engineering</span></h1>
+  <p class="sub">Qué es un LLM, cómo procesa el texto y cómo escribir prompts que sirvan para automatizar</p>
+  <p class="sub" style="font-size:1rem">Flechas ← → para navegar · F para pantalla completa · T para cambiar tema</p>
+</section>
+
+<!-- 2 · Agenda -->
+<section class="slide">
+  <h2>Qué vamos a ver hoy</h2>
+  <ul>
+    <li>Qué es (y qué no es) la <b>Inteligencia Artificial</b>, y cuáles son sus subcampos</li>
+    <li>Qué es un <b>LLM</b> y por qué decimos que "predice la palabra que sigue"</li>
+    <li>La diferencia entre <b>IA</b> e <b>IA generativa</b></li>
+    <li>Cómo procesa el texto: <b>tokens</b>, tokenizador y <b>ventana de contexto</b></li>
+    <li>Por qué una IA <b>alucina</b></li>
+    <li><b>Prompt Engineering</b>: rol, tarea, contexto y formato de salida</li>
+    <li><b>Delimitadores</b>, zero-shot y few-shot</li>
+    <li>Automatización <b>tradicional</b> vs. automatización <b>con IA</b></li>
+    <li>Una práctica para hacer en clase y el <b>repaso</b> con tarjetas</li>
+  </ul>
+</section>
+
+<!-- 3 · ChatGPT no es "la IA" -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Para ubicarnos</span>
+  <h2>ChatGPT no es "la IA"</h2>
+  <p class="big">La <b>Inteligencia Artificial</b> no es un producto: es una <b>rama de la informática</b>.</p>
+  <div class="flow">
+    <div class="node">Ciberseguridad</div>
+    <div class="node">Ciencia de datos</div>
+    <div class="node">Ingeniería de software</div>
+    <div class="node o">Inteligencia Artificial</div>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>🎯 Su objetivo</h3><p class="small">Desarrollar sistemas capaces de realizar tareas que <b>necesitan inteligencia humana</b>.</p></div>
+    <div class="card"><h3>💬 ¿Y ChatGPT o Claude?</h3><p class="small">Son productos construidos <b>con</b> IA. Decirles "la IA" es aceptable en el día a día, pero en términos académicos no es correcto.</p></div>
+  </div>
+  <p class="note">Como toda rama, la IA tiene <b>subcampos</b>. Cuatro de ellos explican de dónde salen ChatGPT y Claude.</p>
+</section>
+
+<!-- 4 · Subcampos -->
+<section class="slide">
+  <h2>Los subcampos de la IA</h2>
+  <div class="grid" style="grid-template-columns:1fr 1.1fr;align-items:center">
+    <div class="card" style="padding:1vh 1vw">
+      <svg class="viz" viewBox="0 0 560 320" style="max-height:46vh" role="img" aria-label="Diagrama: dentro de la Inteligencia Artificial está el Machine Learning y, dentro de él, el Deep Learning. El NLP y la Visión Artificial se cruzan con el Deep Learning. En el cruce entre Deep Learning y NLP aparece el LLM">
+        <rect class="set" x="8" y="8" width="544" height="304" rx="24"/>
+        <text class="grp" x="28" y="36">INTELIGENCIA ARTIFICIAL</text>
+        <rect class="set" x="28" y="50" width="330" height="246" rx="20"/>
+        <text class="b" x="46" y="78">Machine Learning</text>
+        <rect class="set m" x="48" y="94" width="290" height="186" rx="16"/>
+        <text class="b" x="66" y="122">Deep Learning</text>
+        <rect class="set" x="238" y="138" width="296" height="58" rx="14"/>
+        <text class="b" x="436" y="173" text-anchor="middle">NLP · lenguaje</text>
+        <rect class="set o" x="244" y="144" width="88" height="46" rx="10"/>
+        <text class="wt" x="288" y="173" text-anchor="middle">LLM</text>
+        <rect class="set" x="238" y="212" width="296" height="54" rx="14"/>
+        <text class="b" x="436" y="245" text-anchor="middle">Visión Artificial</text>
+      </svg>
+      <p class="cap">Esquema simplificado: los campos se superponen entre sí</p>
+    </div>
+    <table class="plain">
+      <tr><th>Subcampo</th><th>Qué hace</th></tr>
+      <tr><td>Machine Learning</td><td>Las máquinas <b>aprenden con ejemplos</b>: identifican patrones sin que se les diga qué hacer. Cuantos más datos reciben, mejores resultados.</td></tr>
+      <tr><td>Deep Learning</td><td>Subcampo del Machine Learning. Usa <b>redes neuronales de muchas capas</b> para resolver problemas complejos.</td></tr>
+      <tr><td>NLP</td><td><i>Natural Language Processing.</i> Permite leer, interpretar y <b>generar lenguaje humano</b>, escrito o hablado.</td></tr>
+      <tr><td>Visión Artificial</td><td><i>Computer Vision.</i> Si el NLP se ocupa de hablar y escribir, esta rama se ocupa de <b>entender imágenes y videos</b>.</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 5 · De dónde sale un LLM -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Concepto clave</span>
+  <h2>¿De dónde sale un LLM?</h2>
+  <div class="flow">
+    <div class="node">Deep Learning<small>redes de muchas capas</small></div>
+    <span class="arrow">+</span>
+    <div class="node m">NLP<small>entender el lenguaje</small></div>
+    <span class="arrow">+</span>
+    <div class="node">Muchísimo texto<small>libros, foros, artículos</small></div>
+    <span class="arrow">→</span>
+    <div class="node o">LLM<small>Large Language Model</small></div>
+  </div>
+  <p class="big">Un <b>LLM</b> es un sistema diseñado para <b>comprender, procesar y generar lenguaje humano</b>, basado en una red neuronal entrenada con enormes cantidades de texto.</p>
+  <div class="grid">
+    <div class="card"><h3>🤖 Ejemplos</h3><p class="small">Los modelos que están detrás de <b>ChatGPT</b> y de <b>Claude</b> son LLM.</p></div>
+    <div class="card"><h3>🧩 Qué aprendió</h3><p class="small"><b>Patrones</b>: qué palabras suelen seguir a otras, cómo se estructura una frase, cómo se responde una pregunta.</p></div>
+  </div>
+  <p class="note">Estos son los modelos que van a <b>vivir dentro de nuestras automatizaciones</b>.</p>
+</section>
+
+<!-- 6 · Predice la palabra que sigue -->
+<section class="slide">
+  <h2>Un LLM predice la palabra que sigue</h2>
+  <p>Toda respuesta de un LLM sale de <b>probabilidades</b>: calcula qué palabra es la más adecuada para continuar el texto que recibió.</p>
+  <div class="card" style="padding:1vh 1vw">
+    <svg class="viz anim" viewBox="0 0 900 215" role="img" aria-label="Animación: con el contexto de que son las 21 horas, para completar la frase Hola, buenas, la palabra noches tiene una probabilidad mucho más alta que tardes, días o pizzas. El modelo elige noches">
+      <text class="mono" x="20" y="30" style="font-size:17px">Son las 21:00  →  "Hola, buenas ______"</text>
+      <text class="b" x="20" y="74">noches</text><rect class="ghost" x="130" y="54" width="560" height="28" rx="7"/><rect class="fbar grow g1" x="130" y="54" width="500" height="28" rx="7"/>
+      <text class="b" x="20" y="114">tardes</text><rect class="ghost" x="130" y="94" width="560" height="28" rx="7"/><rect class="fbar grow g2" x="130" y="94" width="52" height="28" rx="7"/>
+      <text class="b" x="20" y="154">días</text><rect class="ghost" x="130" y="134" width="560" height="28" rx="7"/><rect class="fbar grow g3" x="130" y="134" width="14" height="28" rx="7"/>
+      <text class="b" x="20" y="194">pizzas</text><rect class="ghost" x="130" y="174" width="560" height="28" rx="7"/><rect class="fbar grow g3" x="130" y="174" width="4" height="28" rx="2"/>
+      <text class="t-ok ap60" x="704" y="74">elige "noches"</text>
+    </svg>
+    <p class="cap">La animación se repite sola · Las barras son ilustrativas, no valores reales de un modelo</p>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>🕘 El contexto manda</h3><p class="small">A las 21:00, lo esperable es "noches". Con otro contexto, la palabra más probable <b>cambia</b>.</p></div>
+    <div class="card"><h3>🧠 No "entiende" como una persona</h3><p class="small">Leyó tanto texto que hace un <b>mapeo matemático</b> muy complejo, y lo expresa de forma muy natural.</p></div>
+  </div>
+  <p class="note">En resumen: <b>simula</b> el comportamiento humano calculando qué palabra debería ir después de otra.</p>
+</section>
+
+<!-- 7 · IA e IA generativa -->
+<section class="slide">
+  <h2>IA e IA generativa</h2>
+  <p>Todo lo que vimos hasta acá es <b>Inteligencia Artificial</b>. Pero <b>no toda la IA crea contenido</b>.</p>
+  <div class="grid">
+    <div class="card">
+      <span class="tag">analiza · clasifica · predice</span>
+      <h3>IA (en general)</h3>
+      <p class="small">Trabaja a partir de datos. Responde, pero <b>no crea nada nuevo</b>.</p>
+      <ul class="small" style="margin-top:1vh">
+        <li>El <b>filtro de spam</b> de tu correo decide si un mail es spam o no.</li>
+        <li>Una <b>app de mapas</b> estima cuánto vas a tardar en llegar.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="tag">crea contenido nuevo</span>
+      <h3>IA generativa</h3>
+      <p class="small">Genera <b>texto, imágenes, audio o código</b> a partir de una instrucción.</p>
+      <ul class="small" style="margin-top:1vh">
+        <li><b>ChatGPT</b> redactando un mail.</li>
+        <li>Una herramienta que <b>genera una imagen</b> a partir de una descripción.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note">Los LLM son <b>IA generativa aplicada al texto</b>. En este curso vamos a usar las dos caras: le vamos a pedir a un LLM que <b>clasifique</b> (como haría un filtro) y también que <b>redacte</b> respuestas.</p>
+</section>
+
+<!-- 8 · Cómo procesa un mensaje -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Por dentro</span>
+  <h2>Cómo procesa un mensaje un LLM</h2>
+  <div class="card" style="padding:1vh 1vw">
+    <svg class="viz anim" viewBox="0 0 900 215" role="img" aria-label="Animación: el texto entra al tokenizador y sale convertido en tokens; la red neuronal calcula probabilidades; y el modelo elige el siguiente token">
+      <line class="wire" x1="20" y1="110" x2="880" y2="110"/>
+      <rect class="box" x="130" y="80" width="140" height="60" rx="12"/><text class="b" x="200" y="116" text-anchor="middle">Tokenizador</text>
+      <rect class="box m" x="380" y="80" width="140" height="60" rx="12"/><text class="b" x="450" y="116" text-anchor="middle">Red neuronal</text>
+      <rect class="box o" x="630" y="80" width="140" height="60" rx="12"/><text class="wt" x="700" y="116" text-anchor="middle">Elige</text>
+      <g class="st1"><text class="b" x="65" y="58" text-anchor="middle">texto</text><text class="mono" x="65" y="172" text-anchor="middle">"Buenos"</text></g>
+      <g class="st2"><text class="b" x="325" y="58" text-anchor="middle">tokens</text><text class="mono" x="325" y="172" text-anchor="middle">[Buen] [os]</text></g>
+      <g class="st3"><text class="b" x="575" y="58" text-anchor="middle">probabilidades</text><text class="mono" x="575" y="172" text-anchor="middle">días: alta</text><text class="mono" x="575" y="190" text-anchor="middle">tardes: baja</text></g>
+      <g class="st4"><text class="b" x="835" y="58" text-anchor="middle">siguiente</text><text class="mono" x="835" y="172" text-anchor="middle">" días"</text></g>
+      <circle class="tok tok5" cx="835" cy="110" r="10" style="--x0:-770px;--y0:0px;--x1:-770px;--y1:0px;--x2:-510px;--y2:0px;--x3:-260px;--y3:0px"/>
+    </svg>
+    <p class="cap">La animación se repite sola · El corte en tokens es ilustrativo</p>
+  </div>
+  <table>
+    <tr><th>Palabra</th><th>Qué significa</th></tr>
+    <tr><td>inferencia</td><td>La fase de <b>ejecución</b>: la red, ya entrenada, predice y genera el siguiente fragmento de texto basándose <b>estrictamente en el contexto que recibe</b>.</td></tr>
+    <tr><td>atención</td><td>El mecanismo con el que la red decide <b>qué partes del texto pesan más</b> para elegir lo que sigue.</td></tr>
+  </table>
+  <p class="note">Y se repite: genera un fragmento, lo suma al texto y vuelve a calcular el siguiente. Así, <b>de a un paso</b>, se escribe toda la respuesta.</p>
+</section>
+
+<!-- 9 · Tokens -->
+<section class="slide">
+  <h2>Tokens: el verdadero idioma del LLM</h2>
+  <p class="big">Un LLM no lee palabras: lee <b>tokens</b>. Un token puede ser una <b>palabra entera</b>, una <b>sílaba</b> o incluso <b>una sola letra</b>.</p>
+  <div class="chips" role="img" aria-label="La frase Hola, compré un buzo y todavía no me llegó, cortada en catorce tokens">
+    <span>Hola</span><span>,</span><span> compr</span><span>é</span><span> un</span><span> bu</span><span>zo</span><span> y</span><span> todavía</span><span> no</span><span> me</span><span> lleg</span><span>ó</span><span>.</span>
+  </div>
+  <p class="cap">Ejemplo ilustrativo: 9 palabras, 14 tokens · Cada modelo corta el texto a su manera</p>
+  <div class="grid">
+    <div class="card"><h3>✂️ El tokenizador</h3><p class="small">El algoritmo que <b>comprime y segmenta</b> el texto antes de que llegue al modelo. No corta por espacios: usa algoritmos estadísticos de <b>subpalabras</b>. El más común es <b>BPE</b> (Byte-Pair Encoding).</p></div>
+    <div class="card"><h3>📏 Por qué te importa</h3><p class="small">Todo se mide en tokens: el <b>límite</b> de texto que el modelo puede manejar y, en las APIs en la nube, el <b>costo</b> (se cobra por token de entrada y de salida).</p></div>
+  </div>
+  <p class="note"><b>Importante:</b> cada modelo está entrenado de forma distinta y usa tokenizaciones distintas. Por eso <b>no todos los modelos son buenos para todo</b>.</p>
+</section>
+
+<!-- 10 · BPE -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Para curiosos</span>
+  <h2>BPE: cómo decide dónde cortar</h2>
+  <p>BPE arma su lista de tokens <b>juntando los pares de letras que más se repiten</b> en los textos con los que se lo prepara.</p>
+  <div class="flow">
+    <div class="node">Letras sueltas<small>a · u · t · o</small></div><span class="arrow">→</span>
+    <div class="node m">Une el par más frecuente<small>a + u → au</small></div><span class="arrow">→</span>
+    <div class="node">Repite miles de veces<small>au + to → auto</small></div><span class="arrow">→</span>
+    <div class="node o">Lista de tokens<small>auto · ción · mente · …</small></div>
+  </div>
+  <div class="grid">
+    <div class="card ok"><span class="tag ok">texto común</span><p class="small">Las palabras muy frecuentes terminan siendo <b>un solo token</b>.</p></div>
+    <div class="card bad"><span class="tag bad">texto raro</span><p class="small">Las palabras poco frecuentes se parten en <b>varios pedazos</b> conocidos.</p></div>
+  </div>
+  <p class="note">No hace falta saber BPE para automatizar. Sí sirve la intuición: <b>el modelo no ve tus palabras, ve pedazos</b>, y la cantidad de pedazos es lo que cuenta para el límite y para el costo.</p>
+</section>
+
+<!-- 11 · Ventana de contexto -->
+<section class="slide">
+  <h2>Ventana de contexto</h2>
+  <p>Hay un límite a la cantidad de tokens que un LLM puede "tener en mente" al mismo tiempo. Ese límite es la <b>ventana de contexto</b>.</p>
+  <div class="card" style="padding:1vh 1vw">
+    <svg class="viz anim" viewBox="0 0 900 190" role="img" aria-label="Animación: una ventana de tamaño fijo se desliza sobre un texto que crece. Al principio entran los seis bloques. Cuando el texto llega a nueve bloques, los tres primeros quedan afuera. Cuando llega a doce, los seis primeros quedan afuera y el modelo ya no los ve">
+      <text class="grp" x="450" y="24" text-anchor="middle">EL TEXTO CRECE · LA VENTANA TIENE TAMAÑO FIJO (6 BLOQUES)</text>
+      <rect class="cell" x="90" y="52" width="60" height="42"/><rect class="cell" x="150" y="52" width="60" height="42"/><rect class="cell" x="210" y="52" width="60" height="42"/><rect class="cell" x="270" y="52" width="60" height="42"/><rect class="cell" x="330" y="52" width="60" height="42"/><rect class="cell" x="390" y="52" width="60" height="42"/>
+      <rect class="ghost" x="450" y="52" width="60" height="42"/><rect class="ghost" x="510" y="52" width="60" height="42"/><rect class="ghost" x="570" y="52" width="60" height="42"/><rect class="ghost" x="630" y="52" width="60" height="42"/><rect class="ghost" x="690" y="52" width="60" height="42"/><rect class="ghost" x="750" y="52" width="60" height="42"/>
+      <g class="w1">
+        <rect class="win" x="86" y="48" width="368" height="50" rx="6"/>
+        <text class="t-ok" x="270" y="130" text-anchor="middle">Todo entra: el modelo ve los 6 bloques</text>
+      </g>
+      <g class="w2">
+        <rect class="cell" x="450" y="52" width="60" height="42"/><rect class="cell" x="510" y="52" width="60" height="42"/><rect class="cell" x="570" y="52" width="60" height="42"/>
+        <rect class="out" x="90" y="52" width="180" height="42"/>
+        <rect class="win" x="266" y="48" width="368" height="50" rx="6"/>
+        <text class="t-bad" x="180" y="130" text-anchor="middle">quedó afuera</text>
+        <text class="t-ok" x="450" y="130" text-anchor="middle">lo que el modelo ve</text>
+      </g>
+      <g class="w3">
+        <rect class="cell" x="450" y="52" width="60" height="42"/><rect class="cell" x="510" y="52" width="60" height="42"/><rect class="cell" x="570" y="52" width="60" height="42"/><rect class="cell" x="630" y="52" width="60" height="42"/><rect class="cell" x="690" y="52" width="60" height="42"/><rect class="cell" x="750" y="52" width="60" height="42"/>
+        <rect class="out" x="90" y="52" width="360" height="42"/>
+        <rect class="win" x="446" y="48" width="368" height="50" rx="6"/>
+        <text class="t-bad" x="270" y="130" text-anchor="middle">quedó afuera: ya no está disponible</text>
+        <text class="t-ok" x="630" y="130" text-anchor="middle">lo que el modelo ve</text>
+      </g>
+      <text class="sm" x="120" y="79" text-anchor="middle">1</text><text class="sm" x="180" y="79" text-anchor="middle">2</text><text class="sm" x="240" y="79" text-anchor="middle">3</text><text class="sm" x="300" y="79" text-anchor="middle">4</text><text class="sm" x="360" y="79" text-anchor="middle">5</text><text class="sm" x="420" y="79" text-anchor="middle">6</text><text class="sm" x="480" y="79" text-anchor="middle">7</text><text class="sm" x="540" y="79" text-anchor="middle">8</text><text class="sm" x="600" y="79" text-anchor="middle">9</text><text class="sm" x="660" y="79" text-anchor="middle">10</text><text class="sm" x="720" y="79" text-anchor="middle">11</text><text class="sm" x="780" y="79" text-anchor="middle">12</text>
+      <text class="sm" x="450" y="172" text-anchor="middle">Cada casilla es un bloque de tokens: instrucciones, datos, mensajes anteriores y respuestas</text>
+    </svg>
+    <p class="cap">La animación se repite sola</p>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>📄 Una hoja de tamaño fijo</h3><p class="small">Si querés seguir escribiendo y ya no hay espacio, hay que <b>borrar el principio</b>.</p></div>
+    <div class="card"><h3>🚫 No "olvida de a poco"</h3><p class="small">No es como una persona: tiene un <b>límite fijo</b>. Lo que quedó afuera simplemente <b>deja de estar disponible</b>.</p></div>
+  </div>
+  <p class="note">Hacer buenos prompts también es <b>no gastar contexto de más</b>: lo que entra en la ventana es lo único que el modelo puede usar para responder.</p>
+</section>
+
+<!-- 12 · Alucinaciones -->
+<section class="slide">
+  <h2>Alucinaciones</h2>
+  <p class="big">Una <b>alucinación</b> es cuando el modelo genera información <b>falsa, inventada o sin sentido</b>, y la presenta como si fuera una verdad absoluta.</p>
+  <div class="card">
+    <h3>🎓 El estudiante que no estudió</h3>
+    <p class="small">Va al examen sin haber estudiado. El profesor pregunta y, en vez de decir "no sé", inventa una respuesta larguísima, con palabras sofisticadas y muchísima seguridad. <b>Suena tan convincente que casi le creés.</b></p>
+  </div>
+  <div class="grid">
+    <div class="card bad">
+      <span class="tag bad">causa 1</span>
+      <h3>Se le fue de la ventana</h3>
+      <p class="small">La información clave ya no entra en su ventana de contexto. En vez de decir "no tengo esa información", <b>completa el vacío</b> con algo plausible.</p>
+    </div>
+    <div class="card bad">
+      <span class="tag bad">causa 2</span>
+      <h3>Nunca se la dimos</h3>
+      <p class="small">El dato no está en el prompt: por ejemplo, los plazos de envío de <b>tu</b> negocio. El modelo no puede adivinarlo, pero <b>responde igual</b>.</p>
+    </div>
+  </div>
+  <p class="note">Por eso el <b>contexto</b> de un prompt importa tanto: lo que el modelo no puede adivinar, hay que dárselo. Es lo que vemos ahora.</p>
+</section>
+
+<!-- 13 · Qué es un prompt -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Prompt Engineering</span>
+  <h2>¿Qué es un prompt?</h2>
+  <p class="big">Un <b>prompt</b> es el <b>puente de comunicación</b> entre nosotros y la IA: el texto o conjunto de instrucciones que le damos para obtener un resultado.</p>
+  <div class="grid">
+    <div class="card bad">
+      <span class="tag bad">genérico</span>
+<pre class="wrap">Armame una rutina para el gym</pre>
+      <p class="small">Devuelve algo súper genérico.</p>
+    </div>
+    <div class="card ok">
+      <span class="tag ok">específico</span>
+<pre class="wrap">Armame una rutina para el gym de 3 días por semana, enfocada en piernas y espalda, de intensidad media.</pre>
+      <p class="small">Con grupo muscular, intensidad y frecuencia, la respuesta mejora.</p>
+    </div>
+  </div>
+  <p><b>Prompt Engineering</b> es la práctica de crear esas instrucciones de forma meticulosa, para obtener respuestas <b>precisas, correctas y alineadas</b> con lo que pedimos.</p>
+  <p class="note">No es solo "saber preguntar": es <b>diseñar, probar, refinar y optimizar</b>. Un pequeño cambio en un prompt puede cambiar por completo la respuesta.</p>
+</section>
+
+<!-- 14 · Anatomía -->
+<section class="slide">
+  <h2>La anatomía de un prompt efectivo</h2>
+  <p class="big">Un prompt que funciona no es más largo: es <b>más ordenado</b>.</p>
+  <table class="plain">
+    <tr><th>Componente</th><th>Qué define</th><th>Ejemplo</th></tr>
+    <tr><td>Rol</td><td><b>Quién</b> queremos que sea la IA al responder.</td><td><i>"Sos un asistente de atención al cliente de una tienda de indumentaria online."</i></td></tr>
+    <tr><td>Tarea</td><td><b>Qué</b> tiene que hacer, con un verbo concreto y sin ambigüedad.</td><td><i>"Clasificá el mensaje en una de estas tres categorías."</i></td></tr>
+    <tr><td>Contexto</td><td>La información que necesita y que <b>no puede adivinar</b>.</td><td><i>"Los envíos demoran 5 días hábiles; un pedido no es un reclamo hasta pasados esos 5 días."</i></td></tr>
+    <tr><td>Formato de salida</td><td><b>Cómo</b> queremos la respuesta, sobre todo si va a seguir viajando por una automatización.</td><td><i>"Devolvé únicamente la categoría, en minúscula, sin explicaciones."</i></td></tr>
+  </table>
+  <p class="note">Los cuatro no son obligatorios siempre. Pero cuando el resultado sale <b>genérico o inconsistente</b>, casi siempre falta alguno.</p>
+</section>
+
+<!-- 15 · Delimitadores -->
+<section class="slide">
+  <h2>Delimitadores: separar la instrucción del dato</h2>
+  <p>En un mismo prompt conviven <b>nuestras instrucciones</b> y <b>el dato a procesar</b> (un mail, el comentario de un cliente, una fila de una planilla). La IA puede confundirlos y tomar el dato como si fuera una instrucción más.</p>
+  <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card">
+      <span class="tag">numerales</span>
+<pre>Mensaje del cliente:
+###
+Hola, quería saber...
+###</pre>
+    </div>
+    <div class="card">
+      <span class="tag">comillas triples</span>
+<pre>Mensaje del cliente:
+"""
+Hola, quería saber...
+"""</pre>
+    </div>
+    <div class="card">
+      <span class="tag">etiquetas</span>
+<pre>&lt;mensaje&gt;
+Hola, quería saber...
+&lt;/mensaje&gt;</pre>
+    </div>
+  </div>
+  <p class="small">No importa cuál elijas. Importa que sea <b>consistente</b> dentro del mismo prompt y que le digas a la IA <b>qué hay adentro</b>.</p>
+  <p class="note"><b>En una automatización esto pesa más que en un chat:</b> el texto que entra al prompt lo escribió otra persona y vos no controlás qué dice. Delimitarlo ayuda a que un mensaje del estilo <i>"ignorá lo anterior y hacé otra cosa"</i> no desvíe el flujo.</p>
+</section>
+
+<!-- 16 · Prompt malo -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">El mismo caso, mal y bien</span>
+  <h2>Primero, mal</h2>
+  <div class="card bad">
+    <span class="tag bad">prompt malo</span>
+<pre class="wrap">Clasificá este mensaje: Hola, compré un buzo la semana pasada y todavía no me llegó.</pre>
+  </div>
+  <p>No tiene <b>rol</b>, no define las <b>categorías</b> posibles, no da <b>contexto</b> y no pide un <b>formato</b>. Cada vez que corre puede devolver algo distinto:</p>
+  <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card"><h3>A veces</h3><p class="small">Una palabra: <code>reclamo</code></p></div>
+    <div class="card"><h3>A veces</h3><p class="small">Un párrafo empático sobre la demora del buzo.</p></div>
+    <div class="card"><h3>A veces</h3><p class="small">Una repregunta: pide más datos antes de contestar.</p></div>
+  </div>
+  <p class="note">Para chatear, alcanza. Para <b>automatizar</b> no sirve: el paso siguiente del flujo <b>no sabe qué le va a llegar</b>.</p>
+</section>
+
+<!-- 17 · Prompt bueno -->
+<section class="slide">
+  <h2>Ahora, bien</h2>
+  <div class="grid" style="grid-template-columns:1.9fr 1fr;align-items:stretch">
+<pre class="wrap"><span class="c"># ROL</span>
+Sos un asistente de atención al cliente de una tienda de indumentaria online.
+
+<span class="c"># TAREA</span>
+Clasificá el mensaje del cliente que está entre los delimitadores en una de estas tres categorías: <span class="f">consulta_talle</span>, <span class="f">reclamo_envio</span>, <span class="f">otro</span>.
+
+<span class="c"># CONTEXTO</span>
+Contexto: los envíos demoran 5 días hábiles. Un pedido no se considera reclamo hasta pasados esos 5 días.
+
+<span class="c"># DATO, ENTRE DELIMITADORES</span>
+Mensaje del cliente:
+<span class="k">###</span>
+<span class="s">Hola, compré un buzo la semana pasada y todavía no me llegó.</span>
+<span class="k">###</span>
+
+<span class="c"># FORMATO DE SALIDA</span>
+Devolvé únicamente la categoría, en minúscula, sin explicación ni texto adicional.</pre>
+    <div class="card ok">
+      <span class="tag ok">respuesta</span>
+<pre>reclamo_envio</pre>
+      <ul class="small" style="margin-top:1.4vh">
+        <li><b>Categorías cerradas:</b> solo puede elegir una de tres.</li>
+        <li><b>Mismo formato</b> en cada ejecución.</li>
+        <li>Listo para que un <b>nodo If</b> lo use sin limpiarlo.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="cap">Las líneas grises con # son etiquetas para la clase: no forman parte del prompt</p>
+  <p class="note">Esa consistencia es la diferencia entre un prompt que sirve para <b>chatear</b> y uno que sirve para <b>automatizar</b>.</p>
+</section>
+
+<!-- 18 · Por qué importa el formato -->
+<section class="slide">
+  <h2>Por qué importa tanto el formato de salida</h2>
+  <p>En una automatización, la respuesta de la IA <b>no la lee una persona</b>: la lee el paso siguiente del flujo.</p>
+  <div class="card" style="padding:1vh 1vw">
+    <svg class="viz anim" viewBox="0 0 900 215" role="img" aria-label="Animación: el mensaje del cliente entra al paso de IA, que devuelve la palabra reclamo_envio. Un nodo If compara esa palabra y manda el flujo por la rama de reclamos de envío">
+      <line class="wire" x1="20" y1="110" x2="570" y2="110"/>
+      <path class="wire" d="M570,110 C615,110 615,46 660,46"/><path class="wire" d="M570,110 L660,110"/><path class="wire" d="M570,110 C615,110 615,174 660,174"/>
+      <rect class="box m" x="150" y="80" width="140" height="60" rx="12"/><text class="b" x="220" y="116" text-anchor="middle">Paso de IA</text>
+      <rect class="box" x="430" y="80" width="140" height="60" rx="12"/><text class="b" x="500" y="116" text-anchor="middle">Nodo If</text>
+      <rect class="box" x="660" y="24" width="225" height="44" rx="10"/><text class="mono" x="772" y="43" text-anchor="middle">consulta_talle</text><text class="sm" x="772" y="60" text-anchor="middle">enviar la tabla de talles</text>
+      <rect class="box o" x="660" y="88" width="225" height="44" rx="10"/><text class="wt mono" x="772" y="107" text-anchor="middle">reclamo_envio</text><text class="wt" x="772" y="124" text-anchor="middle" style="font-size:13px;font-weight:500">avisar a logística</text>
+      <rect class="box" x="660" y="152" width="225" height="44" rx="10"/><text class="mono" x="772" y="171" text-anchor="middle">otro</text><text class="sm" x="772" y="188" text-anchor="middle">derivar a una persona</text>
+      <g class="st1"><text class="b" x="78" y="58" text-anchor="middle">mensaje</text><text class="mono" x="78" y="172" text-anchor="middle">"...todavía no</text><text class="mono" x="78" y="190" text-anchor="middle">me llegó"</text></g>
+      <g class="st2"><text class="b" x="360" y="58" text-anchor="middle">respuesta</text><text class="mono" x="360" y="172" text-anchor="middle">reclamo_envio</text></g>
+      <g class="st3"><text class="sm" x="500" y="172" text-anchor="middle">compara el</text><text class="sm" x="500" y="190" text-anchor="middle">texto exacto</text></g>
+      <circle class="tok tok5" cx="648" cy="110" r="10" style="--x0:-600px;--y0:0px;--x1:-600px;--y1:0px;--x2:-288px;--y2:0px;--x3:-148px;--y3:0px"/>
+    </svg>
+    <p class="cap">La animación se repite sola · Las acciones de cada rama son un ejemplo</p>
+  </div>
+  <div class="grid">
+    <div class="card ok"><span class="tag ok">el If lo reconoce</span><p class="small"><code>reclamo_envio</code></p></div>
+    <div class="card bad"><span class="tag bad">el If no lo reconoce</span><p class="small"><code>Reclamo de envío.</code> &nbsp; <code>Creo que es un reclamo</code></p></div>
+  </div>
+  <p class="note">Un nodo de reglas compara <b>texto exacto</b>. Si la IA agrega una mayúscula, un punto o una explicación, la regla no coincide y el flujo toma el camino equivocado.</p>
+</section>
+
+<!-- 19 · Zero-shot y few-shot -->
+<section class="slide">
+  <h2>Zero-shot y few-shot</h2>
+  <div class="grid">
+    <div class="card">
+      <span class="tag">sin ejemplos</span>
+      <h3>🏊 Zero-shot</h3>
+      <p class="small">"Tirarse a la pileta sin saber si hay agua": pedimos la tarea <b>sin darle ningún ejemplo</b> y confiamos en su conocimiento general. Sirve para tareas muy genéricas, pero el resultado puede salir impredecible o con un formato que no nos sirve.</p>
+    </div>
+    <div class="card ok">
+      <span class="tag ok">con ejemplos</span>
+      <h3>🎯 Few-shot</h3>
+      <p class="small">Le enseñamos con <b>dos o tres ejemplos</b> dentro del mismo prompt (los famosos <i>shots</i>). "Copia" el tono y la estructura, sin que le expliquemos las reglas en un párrafo gigante.</p>
+    </div>
+  </div>
+<pre class="wrap">Respondé la reseña del cliente con el mismo tono de los ejemplos.
+
+Reseña: <span class="s">"Llegó rapidísimo, gracias"</span>
+Respuesta: <span class="f">¡Gracias a vos! Nos alegra un montón que haya llegado rápido.</span>
+
+Reseña: <span class="s">"El talle me quedó chico"</span>
+Respuesta: <span class="f">¡Uy, qué macana! Escribinos y te lo cambiamos sin costo.</span>
+
+Reseña: <span class="s">"Muy linda la tela del buzo"</span>
+Respuesta:</pre>
+  <p class="note">Con dos ejemplos ya entiende el tono (amable, con signos de exclamación) y el largo. El prompt del buzo era <b>zero-shot</b>; si un resultado sale inconsistente, <b>sumá ejemplos</b>.</p>
+</section>
+
+<!-- 20 · Tradicional vs con IA -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Automatizaciones</span>
+  <h2>Automatización tradicional vs. con IA</h2>
+  <p>Una <b>automatización</b> es un flujo que se ejecuta solo cada vez que pasa algo, por ejemplo cuando llega un mensaje. Y <b>no siempre necesita IA</b>.</p>
+  <table class="plain">
+    <tr><th></th><th>Tradicional (reglas fijas)</th><th>Con IA</th></tr>
+    <tr><td>Cómo decide</td><td>Con una regla escrita de antemano: si el mensaje contiene la palabra "envío" → <code>reclamo_envio</code>.</td><td>Con un prompt como el que armamos: el modelo lee el mensaje y elige la categoría.</td></tr>
+    <tr><td>Con "compré un buzo la semana pasada y todavía no me llegó"</td><td><span class="c-bad">Falla:</span> el mensaje no contiene la palabra "envío".</td><td><span class="c-ok">Acierta:</span> lo clasifica como <code>reclamo_envio</code>, porque interpreta el sentido.</td></tr>
+    <tr><td>Cuándo conviene</td><td>Cuando los datos son predecibles y la regla siempre se cumple.</td><td>Cuando el texto lo escriben personas y cada una lo dice distinto.</td></tr>
+  </table>
+  <div class="grid">
+    <div class="card"><h3>📐 Regla fija</h3><p class="small">Más <b>barata</b> y <b>predecible</b>.</p></div>
+    <div class="card"><h3>🧠 IA</h3><p class="small">Más <b>flexible</b> con el lenguaje humano.</p></div>
+  </div>
+  <p class="note">No confundir "automatización" con "Inteligencia Artificial": automatizar es que la tarea se ejecute sola. Qué es una automatización y cómo se arma lo vemos en detalle en el <b>Módulo 2</b>.</p>
+</section>
+
+<!-- 21 · Probalo vos -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Práctica · no se entrega</span>
+  <h2>Probalo vos: de la idea al prompt</h2>
+  <p><b>El caso:</b> una inmobiliaria recibe por mail decenas de consultas por día. Una persona las lee una por una para saber si el interesado quiere <b>alquilar</b>, <b>comprar</b> o <b>tasar</b> una propiedad.</p>
+  <div class="flow">
+    <div class="node">Mail de consulta</div><span class="arrow">→</span>
+    <div class="node m">Paso de IA<small>tu prompt</small></div><span class="arrow">→</span>
+    <div class="node o">alquiler · compra · tasacion · otro</div>
+  </div>
+  <table class="plain">
+    <tr><th>Paso</th><th>Qué tiene que tener tu prompt</th></tr>
+    <tr><td>1 · Rol</td><td>¿Quién es la IA en esta inmobiliaria?</td></tr>
+    <tr><td>2 · Tarea</td><td>Un verbo concreto y una lista <b>cerrada</b> de categorías.</td></tr>
+    <tr><td>3 · Contexto</td><td>Los casos dudosos: ¿qué pasa si el mail pide información y no dice si es para alquilar o comprar?</td></tr>
+    <tr><td>4 · Delimitadores</td><td>Separá tus instrucciones del mail que llega.</td></tr>
+    <tr><td>5 · Formato</td><td>Una respuesta que el paso siguiente pueda usar <b>sin limpiarla</b>.</td></tr>
+  </table>
+  <p class="note">Escribilo en un chat con cualquier modelo y probalo con tres mails distintos. Si las tres respuestas no tienen el mismo formato, falta algo.</p>
+</section>
+
+<!-- 22 · Solución posible -->
+<section class="slide">
+  <h2>Una solución posible</h2>
+  <div class="grid" style="grid-template-columns:1.7fr 1fr;align-items:stretch">
+<pre class="wrap">Sos un asistente de la recepción de una inmobiliaria.
+
+Clasificá el mail que está entre los delimitadores en una de estas categorías: <span class="f">alquiler</span>, <span class="f">compra</span>, <span class="f">tasacion</span>, <span class="f">otro</span>.
+
+Contexto: "tasar" o "cuánto vale mi casa" es tasacion. Si el mail pide información de una propiedad sin decir si es para alquilar o comprar, usá otro.
+
+Mail:
+<span class="k">###</span>
+<span class="s">Hola, vi el depto de Palermo publicado y quería saber si está disponible para alquilar desde marzo.</span>
+<span class="k">###</span>
+
+Devolvé únicamente la categoría, en minúscula y sin tildes, sin explicaciones.</pre>
+    <div class="card ok">
+      <span class="tag ok">respuesta</span>
+<pre>alquiler</pre>
+      <h3 style="margin-top:1.4vh">Por qué funciona</h3>
+      <ul class="small">
+        <li>El <b>rol</b> ubica a la IA.</li>
+        <li>La <b>tarea</b> tiene un verbo concreto y categorías cerradas.</li>
+        <li>El <b>contexto</b> resuelve los casos dudosos.</li>
+        <li>El <b>formato</b> deja el resultado listo para la automatización.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note">No es la única respuesta correcta. Lo que importa es que estén los cuatro componentes y los delimitadores.</p>
+</section>
+
+<!-- 23 · Repaso 1 -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Repaso · tarjetas 1 a 3</span>
+  <h2>Repaso: pensá la respuesta antes de abrirla</h2>
+  <div class="qa">
+    <button class="q" type="button"><span class="num">01</span><span>¿Cuál es la diferencia principal entre Inteligencia Artificial (IA) e IA generativa?</span><span class="ver"></span></button>
+    <div class="a">La IA es un campo amplio de la computación donde los sistemas realizan tareas que requieren inteligencia humana. La IA generativa es una rama específica capaz de <b>crear contenido nuevo</b> (texto, imágenes, código) a partir de instrucciones.</div>
+  </div>
+  <div class="qa">
+    <button class="q" type="button"><span class="num">02</span><span>¿Qué es realmente el Prompt Engineering y por qué va más allá de redactar una pregunta?</span><span class="ver"></span></button>
+    <div class="a">Es el proceso de <b>diseñar, probar, refinar y optimizar</b> las instrucciones que se le dan a un modelo para obtener resultados más precisos, útiles y consistentes. No es solo "saber preguntar": es un enfoque técnico e iterativo.</div>
+  </div>
+  <div class="qa">
+    <button class="q" type="button"><span class="num">03</span><span>¿Qué es un LLM y cuál es su función principal en la IA generativa?</span><span class="ver"></span></button>
+    <div class="a">Un LLM (Large Language Model) es un modelo entrenado con enormes cantidades de texto para <b>predecir y generar lenguaje natural</b>. Procesa el contexto que recibe para responder preguntas, resumir o crear contenido a partir de los patrones que aprendió.</div>
+  </div>
+  <p class="cap">Hacé clic en cada tarjeta para ver la respuesta</p>
+</section>
+
+<!-- 24 · Repaso 2 -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Repaso · tarjetas 4 y 5</span>
+  <h2>Repaso: las dos últimas</h2>
+  <div class="qa">
+    <button class="q" type="button"><span class="num">04</span><span>¿En qué se diferencian las técnicas zero-shot y few-shot?</span><span class="ver"></span></button>
+    <div class="a"><b>Zero-shot</b> es pedir una tarea sin darle ejemplos previos al modelo. <b>Few-shot</b> es incluir uno o varios ejemplos de formato o estilo en el prompt, para guiar la respuesta hacia el resultado esperado.</div>
+  </div>
+  <div class="qa">
+    <button class="q" type="button"><span class="num">05</span><span>¿Por qué no debemos confundir "automatización" con "Inteligencia Artificial"?</span><span class="ver"></span></button>
+    <div class="a">La automatización busca que una tarea <b>se ejecute sola</b>, pero no siempre requiere IA: puede resolverse con reglas fijas. La automatización con IA usa modelos para <b>interpretar información no estructurada</b> y tomar decisiones o generar contenido durante el proceso.</div>
+  </div>
+  <p class="cap">Hacé clic en cada tarjeta para ver la respuesta</p>
+  <p class="note"><b>Si fallaste alguna:</b> volvé a leer ese concepto en el material del curso. No se trata de memorizar, sino de entender el <i>porqué</i>.</p>
+</section>
+
+<!-- 25 · Resumen -->
+<section class="slide">
+  <h2>Resumen de la clase</h2>
+  <ul>
+    <li>La <b>IA</b> es una rama de la informática. Un <b>LLM</b> nace de combinar Deep Learning y NLP con enormes cantidades de texto.</li>
+    <li>Un LLM <b>predice lo que sigue</b> según probabilidades: no "entiende" como una persona.</li>
+    <li>No lee palabras, lee <b>tokens</b>. Y tiene un límite fijo: la <b>ventana de contexto</b>.</li>
+    <li>Cuando le falta información, puede <b>alucinar</b>: inventa una respuesta plausible y la da con total seguridad.</li>
+    <li>Un prompt efectivo tiene <b>rol, tarea, contexto y formato de salida</b>.</li>
+    <li>Los <b>delimitadores</b> separan tus instrucciones del dato que escribió otra persona.</li>
+    <li><b>Zero-shot</b>: sin ejemplos. <b>Few-shot</b>: con dos o tres ejemplos que marcan tono y formato.</li>
+    <li>Automatizar no es lo mismo que usar IA: la <b>regla fija</b> es barata y predecible; la <b>IA</b> es flexible con el lenguaje humano.</li>
+  </ul>
+  <p class="sub">¿Preguntas?</p>
+</section>
+
+<!-- 26 · Lo que viene -->
+<section class="slide">
+  <span class="tag" style="align-self:flex-start">Lo que viene</span>
+  <h2>Módulo 2 y la Preentrega 1</h2>
+  <p>La primera pre-entrega se entrega en el <b>Módulo 2</b>: <b>"Diseño de una Solución con IA en n8n"</b>. Vas a hacer lo mismo que hoy, pero con un proceso de <b>tu trabajo o tu vida diaria</b>.</p>
+  <table class="plain">
+    <tr><th>Sección del PDF</th><th>Qué va</th><th>Dónde se ve</th></tr>
+    <tr><td>1 · Identificación y ROI</td><td>Un proceso manual y repetitivo, y por qué conviene automatizarlo: tiempo que ahorrarías por semana.</td><td>Módulo 2</td></tr>
+    <tr><td>2 · Diseño del workflow</td><td>El disparador (trigger), qué datos se procesan y cuál es el resultado final.</td><td>Módulo 2</td></tr>
+    <tr><td>3 · Ingeniería del prompt</td><td>El prompt exacto del paso de IA, con rol, tarea y formato de salida.</td><td><span class="c-ok">Hoy</span></td></tr>
+    <tr><td>4 · Gestión de errores</td><td>Un riesgo (por ejemplo, alucinaciones o datos incompletos) y cómo ajustarías el flujo o el prompt.</td><td><span class="c-ok">Hoy</span></td></tr>
+  </table>
+  <div class="grid">
+    <div class="card ok"><span class="tag ok">para ir adelantando</span><p class="small">Elegí un proceso repetitivo tuyo y escribí el <b>prompt</b> que lo resolvería, como en la práctica de la inmobiliaria.</p></div>
+    <div class="card"><h3>📦 Formato de entrega</h3><p class="small">Un <b>único PDF</b> con las cuatro secciones tituladas. No hace falta que el flujo esté construido en n8n: alcanza con el diseño lógico y el prompt.</p></div>
+  </div>
+  <p class="note">El <b>ROI</b> y el <b>boceto del flujo en n8n</b> no están en este módulo: se explican en el Módulo 2.</p>
+</section>
+
+</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  // Envuelve el contenido de cada slide para poder escalarlo como un bloque
+  slides.forEach(sl => {
+    const w = document.createElement('div');
+    w.className = 'fit';
+    while (sl.firstChild) w.appendChild(sl.firstChild);
+    sl.appendChild(w);
+  });
+  function fit(sl){
+    const w = sl.querySelector('.fit');
+    if (!w) return;
+    if (sl.classList.contains('scroll')) { w.style.zoom = 1; return; }
+    const overflows = () => sl.scrollHeight > sl.clientHeight + 1 || sl.scrollWidth > sl.clientWidth + 1 ||
+      [...w.querySelectorAll('pre,table')].some(e => e.scrollWidth > e.clientWidth + 1);
+    let z = 1;
+    const apply = () => { w.style.zoom = z; };
+    apply();
+    while (overflows() && z > 0.4) { z = Math.round((z - 0.03) * 100) / 100; apply(); }
+  }
+  const sections = [
+    {name:'IA y LLM',     from:2,  to:7},
+    {name:'Tokens',       from:8,  to:10},
+    {name:'Contexto',     from:11, to:12},
+    {name:'Prompts',      from:13, to:15},
+    {name:'Mal y bien',   from:16, to:19},
+    {name:'Con o sin IA', from:20, to:20},
+    {name:'Práctica',     from:21, to:22},
+    {name:'Repaso',       from:23, to:26}
+  ];
+  let i = 0;
+  const bar = document.getElementById('bar'), count = document.getElementById('count');
+  const nav = document.getElementById('nav');
+  sections.forEach(s => {
+    const b = document.createElement('button');
+    b.textContent = s.name;
+    b.onclick = () => show(s.from - 1);
+    nav.appendChild(b);
+  });
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    fit(slides[i]);
+    bar.style.width = ((i + 1) / slides.length * 100) + '%';
+    count.textContent = (i + 1) + ' / ' + slides.length;
+    [...nav.children].forEach((b, k) => b.classList.toggle('active', i + 1 >= sections[k].from && i + 1 <= sections[k].to));
+    try { history.replaceState(null, '', '#' + (i + 1)); } catch(e) {}
+  }
+  function toggleTheme(){
+    const root = document.documentElement;
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('curso-theme', next); } catch(e) {}
+  }
+  document.getElementById('theme').onclick = toggleTheme;
+  // Lleva el tema actual (claro/oscuro) a la página siguiente
+  function conTema(url){
+    const t = document.documentElement.getAttribute('data-theme') || 'light';
+    return url + (url.includes('?') ? '&' : '?') + 'tema=' + t;
+  }
+  document.querySelectorAll('a.to-index').forEach(a => a.addEventListener('click', ev => {
+    ev.preventDefault(); location.href = conTema('index.html');
+  }));
+  document.getElementById('prev').onclick = () => show(i - 1);
+  document.getElementById('next').onclick = () => show(i + 1);
+  // Tarjetas de repaso: clic para mostrar u ocultar la respuesta
+  document.querySelectorAll('.qa .q').forEach(b => {
+    b.setAttribute('aria-expanded', 'false');
+    b.addEventListener('click', () => {
+      const open = b.parentElement.classList.toggle('open');
+      b.setAttribute('aria-expanded', open ? 'true' : 'false');
+      fit(slides[i]);
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === ' ' && e.target.closest && e.target.closest('.qa')) return;
+    if (['ArrowRight','PageDown',' '].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    else if (e.key.toLowerCase() === 't') toggleTheme();
+    else if (e.key.toLowerCase() === 'i') location.href = conTema('index.html');
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key.toLowerCase() === 'f') {
+      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    }
+  });
+  show((parseInt(location.hash.slice(1)) || 1) - 1);
+  window.addEventListener('resize', () => fit(slides[i]));
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fit(slides[i]));
+</script>
+</body>
+</html>
